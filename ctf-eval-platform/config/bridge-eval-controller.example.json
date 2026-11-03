@@ -1,0 +1,16 @@
+{
+  "fieldBase": "http://127.0.0.1:14230",
+  "bridgeBase": "http://127.0.0.1:14171",
+  "lanes": [[0], [1], [2]],
+  "debugProfile": 7,
+  "wallTimeoutSeconds": 9000,
+  "pollSeconds": 10,
+  "requestTimeoutSeconds": 300,
+  "workRoot": "/var/lib/ctf-eval/work",
+  "stateRoot": "/var/lib/ctf-eval/state",
+  "artifactRoot": "/var/lib/ctf-eval/artifacts",
+  "retentionClass": "pinned",
+  "executionMode": "DIRECT",
+  "executionCapacity": 1,
+  "controllerConcurrency": 3
+}

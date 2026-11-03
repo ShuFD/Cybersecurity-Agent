@@ -1,0 +1,78 @@
+{
+	"name": "@secheur/agent",
+	"version": "0.1.0",
+	"description": "SecHeur Agent application layer built on the complete Pi agent harness",
+	"keywords": ["pi-package", "pi-extension", "ultracode"],
+	"type": "module",
+	"pi": {
+		"extensions": ["./dist/ultracode.js"]
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./extension": {
+			"types": "./dist/extension.d.ts",
+			"import": "./dist/extension.js"
+		},
+		"./ultracode": {
+			"types": "./dist/ultracode.d.ts",
+			"import": "./dist/ultracode.js"
+		}
+	},
+	"bin": {
+		"secheur": "dist/cli.js",
+		"secheur-bridge": "dist/bridge-cli.js",
+		"secheur-server": "dist/protocol-cli.js",
+		"secheur-competition": "dist/competition-cli.js"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"test/fixtures/mcp-stdio-fixture.js"
+	],
+	"bundledDependencies": [
+		"@repoaudit/typescript-adapter"
+	],
+	"scripts": {
+		"clean": "shx rm -rf dist",
+		"build": "npm --prefix ../webui run build && tsgo -p tsconfig.build.json && node scripts/stage-repoaudit-extension.mjs --replace && node scripts/stage-legacy.mjs --replace && node scripts/stage-ultracode.mjs && node scripts/stage-cairn-license.mjs && shx chmod +x dist/cli.js dist/bridge-cli.js dist/protocol-cli.js dist/competition-cli.js && node scripts/verify-dist.mjs",
+		"start": "tsx src/cli.ts",
+		"bridge": "tsx src/bridge-cli.ts",
+		"server": "tsx src/protocol-cli.ts",
+		"competition": "tsx src/competition-cli.ts",
+		"test": "vitest --run",
+		"typecheck": "tsgo -p tsconfig.test.json",
+		"prepack": "node scripts/verify-dist.mjs",
+		"prepublishOnly": "npm run clean && npm run build",
+		"verify:dist": "node scripts/verify-dist.mjs"
+	},
+	"dependencies": {
+		"@earendil-works/pi-agent-core": "0.84.1",
+		"@earendil-works/pi-ai": "0.84.1",
+		"@earendil-works/pi-client": "0.84.1",
+		"@earendil-works/pi-coding-agent": "0.84.1",
+		"@earendil-works/pi-protocol": "0.84.1",
+		"@earendil-works/pi-server": "0.84.1",
+		"@earendil-works/pi-session-backend-sqlite-node": "0.84.1",
+		"@earendil-works/pi-telemetry": "0.84.1",
+		"@earendil-works/pi-tui": "0.84.1",
+		"@repoaudit/typescript-adapter": "0.1.0",
+		"typebox": "1.3.7",
+		"yaml": "2.9.0"
+	},
+	"devDependencies": {
+		"@types/node": "22.19.19",
+		"shx": "0.4.0",
+		"tsx": "4.22.1",
+		"typescript": "5.9.3",
+		"vitest": "4.1.9"
+	},
+	"engines": {
+		"node": ">=22.19.0"
+	},
+	"license": "MIT"
+}

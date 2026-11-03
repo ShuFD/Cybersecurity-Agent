@@ -1,0 +1,25 @@
+{
+  "name": "@secheur/dasctf-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pi extension that rewrites the DASCTF whole-endpoint gateway URL so OpenAI/Anthropic SDK path suffixes are stripped before forwarding.",
+  "type": "module",
+  "main": "dasctf-gateway.js",
+  "exports": {
+    ".": "./dasctf-gateway.js"
+  },
+  "pi": {
+    "extensions": [
+      "./dasctf-gateway.ts"
+    ]
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

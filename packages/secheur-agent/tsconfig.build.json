@@ -1,0 +1,23 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"paths": {
+			"@earendil-works/pi-agent-core": ["../agent/dist/index.d.ts"],
+			"@earendil-works/pi-agent-core/node": ["../agent/dist/node.d.ts"],
+			"@earendil-works/pi-ai": ["../ai/dist/index.d.ts"],
+			"@earendil-works/pi-client": ["../client/dist/index.d.ts"],
+			"@earendil-works/pi-client/unix": ["../client/dist/unix.d.ts"],
+			"@earendil-works/pi-coding-agent": ["../coding-agent/dist/index.d.ts"],
+			"@earendil-works/pi-protocol": ["../protocol/dist/index.d.ts"],
+			"@earendil-works/pi-server": ["../server/dist/index.d.ts"],
+			"@earendil-works/pi-server/unix": ["../server/dist/transports/unix/index.d.ts"],
+			"@earendil-works/pi-session-backend-sqlite-node": ["../session-backends/sqlite-node/dist/index.d.ts"],
+			"@earendil-works/pi-telemetry": ["../telemetry/dist/index.d.ts"],
+			"@earendil-works/pi-tui": ["../tui/dist/index.d.ts"]
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,225 @@
+temp/
+tmp/
+tmp*
+*.ai.py
+output.txt
+tool_results/
+uv.lock
+/docs/
+
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+
+.streamlit/
+.secheur-agent/
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.DS_Store
+Thumbs.db
+
+*.log
+.env
+auth.json
+model_responses.txt
+
+# Sensitive files (API keys, credentials)
+mykey.py
+mykey.py.bak
+mykey.py.tmp
+
+tasks/
+
+*.zip
+*.exe
+
+memory/*
+!memory/memory_management_sop.md
+
+# Final curated attack-memory artifacts only. Raw corpora, evidence, and local
+# build/distillation outputs remain local.
+!memory/attack_memory/
+!memory/attack_memory/crypto_v1/
+!memory/attack_memory/crypto_v1/knowledge/
+!memory/attack_memory/crypto_v1/knowledge/cards.jsonl
+!memory/attack_memory/pwn_v2/
+!memory/attack_memory/pwn_v2/records.jsonl
+!memory/attack_memory/pwn_v2/manifest.json
+!memory/attack_memory/pwn_v2/embeddings.jsonl
+memory/attack_memory/crypto_v1/knowledge/review_report.json
+memory/attack_memory/crypto_v1/corpus/
+memory/attack_memory/crypto_v1/fetch_cache/
+memory/attack_memory/crypto_v1/records.jsonl
+!memory/attack_memory/crypto_v1/records.jsonl
+memory/attack_memory/crypto_v1/embeddings.jsonl
+memory/attack_memory/crypto_v1/manifest.json
+!memory/attack_memory/crypto_v1/manifest.json
+!memory/attack_memory/crypto_v1/embeddings.jsonl
+memory/attack_memory/crypto_v1/build_report.json
+!memory/attack_memory/crypto_v2/
+!memory/attack_memory/crypto_v2/knowledge/
+!memory/attack_memory/crypto_v2/knowledge/cards.jsonl
+!memory/attack_memory/crypto_v2/knowledge/review_queue.jsonl
+!memory/attack_memory/crypto_v2/evidence/
+!memory/attack_memory/crypto_v2/evidence/**
+!memory/attack_memory/crypto_v2/records.jsonl
+!memory/attack_memory/crypto_v2/manifest.json
+!memory/attack_memory/crypto_v2/embeddings.jsonl
+memory/attack_memory/pwn_v1/**
+!memory/attack_memory/pwn_v1/
+!memory/attack_memory/pwn_v1/embeddings.jsonl
+!memory/attack_memory/pwn_v1/manifest.json
+!memory/attack_memory/pwn_v1/records.jsonl
+!memory/attack_memory/pwn_v4/
+!memory/attack_memory/pwn_v4/records.jsonl
+!memory/attack_memory/pwn_v4/manifest.json
+!memory/attack_memory/pwn_v4/embeddings.jsonl
+!memory/attack_memory/reverse_v1/
+!memory/attack_memory/reverse_v1/records.jsonl
+!memory/attack_memory/reverse_v1/manifest.json
+!memory/attack_memory/reverse_v1/embeddings.jsonl
+!memory/attack_memory/reverse_v2/
+!memory/attack_memory/reverse_v2/records.jsonl
+!memory/attack_memory/reverse_v2/manifest.json
+!memory/attack_memory/reverse_v2/embeddings.jsonl
+!memory/attack_memory/web_v1/
+!memory/attack_memory/web_v1/records.jsonl
+!memory/attack_memory/web_v1/manifest.json
+!memory/attack_memory/web_v1/embeddings.jsonl
+!memory/attack_memory/web_v2/
+!memory/attack_memory/web_v2/records.jsonl
+!memory/attack_memory/web_v2/manifest.json
+!memory/attack_memory/web_v2/embeddings.jsonl
+ctf_attack_memory/bulk.py
+!ctf_attack_memory/bulk.py
+ctf_attack_memory/crawler.py
+!ctf_attack_memory/crawler.py
+ctf_attack_memory/pipeline.py
+!ctf_attack_memory/pipeline.py
+ctf_attack_memory/segment.py
+!ctf_attack_memory/segment.py
+ctf_attack_memory/clean.py
+!ctf_attack_memory/clean.py
+ctf_attack_memory/validate.py
+# distill.py 现在是运行时兼容门面，不再是本地语料构建脚本。
+!ctf_attack_memory/distill.py
+# These tests exercise local-only corpus construction and are kept with it.
+tests/test_crypto_knowledge_cards.py
+tests/test_ctf_attack_memory_bulk.py
+!tests/test_ctf_attack_memory_bulk.py
+tests/test_ctf_attack_memory_crawler.py
+!tests/test_ctf_attack_memory_crawler.py
+tests/test_pwn_knowledge_base.py
+
+# Allow tracking of specific SOPs
+!memory/web_setup_sop.md
+!memory/autonomous_operation_sop.md
+!memory/autonomous_operation_sop/
+!memory/autonomous_operation_sop/**
+!memory/scheduled_task_sop.md
+
+# L4 session archiver (only the script, not archives)
+!memory/L4_raw_sessions/
+memory/L4_raw_sessions/*
+!memory/L4_raw_sessions/compress_session.py
+!memory/L4_raw_sessions/salient_mining_sop.md
+
+# ljqCtrl related tools
+!memory/ljqCtrl.py
+!memory/ljqCtrl_sop.md
+
+# procmem_scanner related tools
+!memory/procmem_scanner.py
+!memory/procmem_scanner_sop.md
+
+# TMWebDriver SOP
+!memory/tmwebdriver_sop.md
+
+# Vue3 Component SOP
+!memory/vue3_component_sop.md
+
+# Subagent SOP
+!memory/subagent.md
+
+# Incubator SOP
+!memory/incubator_sop.md
+
+# Supervisor SOP
+!memory/supervisor_sop.md
+
+# Plan SOP
+!memory/plan_sop.md
+
+# Goal Mode SOP
+!memory/goal_mode_sop.md
+
+# Goal Hive Mode SOP
+!memory/goal_hive_sop.md
+!memory/goal_hive_master_duty.md
+
+# Morphling SOP
+!memory/morphling_sop.md
+
+# Skill Search SOP
+!memory/skill_search/
+!memory/skill_search/**
+
+
+# ADB UI tool
+!memory/adb_ui.py
+
+# Keychain
+!memory/keychain.py
+
+# Vision / OCR / UI detection tools
+!memory/ocr_utils.py
+!memory/vision_sop.md
+!memory/ui_detect.py
+!memory/vision_api.template.py
+
+# Memory management
+!memory/memory_cleanup_sop.md
+
+# Checklist/MapReduce
+!memory/checklist_helper.py
+!memory/checklist_sop.md
+
+# Code Review Principles
+!memory/code_review_principles.md
+
+# Review Mode SOP
+!memory/review_sop.md
+
+# Visual Studio
+.vs/
+restore_commit.txt
+
+sche_tasks/
+# CDP Bridge 密钥配置（首次运行自动生成）
+assets/tmwd_cdp_bridge/config.js
+assets/copilot_proxy.pyw
+**log.*
+!runtime_session_log.py
+
+# Reflect (ignore new files, whitelist existing)
+reflect/*
+!reflect/autonomous.py
+!reflect/scheduler.py
+!reflect/agent_team_worker.py
+!reflect/goal_mode.py
+!reflect/checklist_master.py
+
+# Universal: never track __pycache__ anywhere
+**/__pycache__/
+
+.claude/

@@ -1,0 +1,96 @@
+[
+  {
+    "targetId": "avatar",
+    "runId": "planning_cairn_88023365f2e1d55c5d1380ea1cc007fd",
+    "slot": 1,
+    "expectedAdmission": true,
+    "events": [
+      {
+        "type": "model_service_wait",
+        "eventId": "8fc0a5f4-7394-4f7d-9be5-809f9626a27f",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      },
+      {
+        "type": "cairn_model_service_wait",
+        "eventId": "f3b625ac-60c8-4077-9f1a-5d4252f38d1c",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      }
+    ],
+    "startedAt": "2026-10-15T16:36:05+0800"
+  },
+  {
+    "targetId": "rpgo",
+    "runId": "planning_cairn_c16c281664bbbb183500f4189cf618e6",
+    "slot": 4,
+    "expectedAdmission": true,
+    "events": [
+      {
+        "type": "cairn_model_service_wait",
+        "eventId": "a9158b4d-1952-40b4-87d7-3658474e4662",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      },
+      {
+        "type": "cairn_model_service_wait",
+        "eventId": "3806103f-1612-47c3-a255-9f9ea5855cda",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      }
+    ],
+    "startedAt": "2026-10-15T16:43:18+0800"
+  },
+  {
+    "targetId": "intercode-ctf/13",
+    "runId": "planning_cairn_eafe7a38af57fd0eb3425fa060739adf",
+    "slot": 1,
+    "expectedAdmission": false,
+    "events": [
+      {
+        "type": "model_service_wait",
+        "eventId": "c23da250-09df-4ebb-9ef1-1cb391449314",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      }
+    ],
+    "startedAt": "2026-10-15T17:26:16+0800"
+  },
+  {
+    "targetId": "intercode-ctf/17",
+    "runId": "planning_cairn_a0e18e60349810561ec667bc4954f152",
+    "slot": 4,
+    "expectedAdmission": false,
+    "events": [
+      {
+        "type": "model_service_wait",
+        "eventId": "ab48405a-6996-462e-ad22-34d7733dd11d",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      }
+    ],
+    "startedAt": "2026-10-15T17:33:28+0800"
+  },
+  {
+    "targetId": "WalkingToTheSeaSide",
+    "runId": "planning_cairn_e06e8490e9442fc3988280735c43d501",
+    "slot": 1,
+    "expectedAdmission": false,
+    "events": [
+      {
+        "type": "model_service_wait",
+        "eventId": "3146586f-f996-48c4-9d82-e5ef6e595ea8",
+        "payload": {
+          "reason": "provider_quota_exhausted"
+        }
+      }
+    ],
+    "startedAt": "2026-10-15T18:23:39+0800"
+  }
+]

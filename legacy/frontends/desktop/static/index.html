@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>SecHeur Agent</title>
+  <link rel="stylesheet" href="styles.css?v=updates-blue-20261022">
+  <link rel="stylesheet" href="trajectory-viewer.css?v=deepseek-trajectory-1">
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar" aria-label="导航">
+      <div class="window-controls" aria-hidden="true">
+      </div>
+
+      <div id="sidebar-brand" class="sidebar-brand" aria-label="SecHeur Agent" role="button" tabindex="0" title="SecHeur Agent">
+        <img class="sidebar-brand-logo" src="assets/secheur-agent-logo.png?v=concept-10" alt="" aria-hidden="true">
+        <span>SecHeur Agent</span>
+      </div>
+
+      <nav class="sidebar-primary" aria-label="主导航">
+        <button class="sidebar-nav-item active" type="button" aria-current="page">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          </svg>
+          <span>对话模式</span>
+        </button>
+      </nav>
+
+      <section class="sidebar-section sidebar-sessions">
+        <div class="sidebar-section-title">
+          <span>最近对话</span>
+        </div>
+        <div id="session-list" class="tab-strip" role="tablist" aria-label="对话">
+          <button id="new-session-btn" class="tab-new-btn" title="新建对话" aria-label="新建对话">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>新建对话</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="solver-section" class="sidebar-section sidebar-solvers hidden" aria-label="后台 Solver" aria-hidden="true">
+        <div class="sidebar-section-title">
+          <span>后台 Solver</span>
+          <span id="solver-summary-count" class="sidebar-section-count" role="status" aria-live="polite">0</span>
+        </div>
+        <div id="solver-list" class="solver-list" aria-live="polite"></div>
+      </section>
+
+      <section class="sidebar-section sidebar-worklist" aria-label="CTF 并行工作列表">
+        <div class="sidebar-section-title">
+          <span>CTF 工作列表</span>
+          <span class="sidebar-inline-actions">
+            <button id="worklist-sync-btn" class="sidebar-inline-btn" type="button" title="同步未解题目" aria-label="同步未解题目">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 11a8.1 8.1 0 0 0-14.8-3L3 11"/><path d="M3 5v6h6"/><path d="M4 13a8.1 8.1 0 0 0 14.8 3L21 13"/><path d="M21 19v-6h-6"/>
+              </svg>
+            </button>
+            <button id="worklist-toggle-btn" class="sidebar-inline-btn" type="button" title="启动工作列表" aria-label="启动工作列表">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m8 5 11 7-11 7V5Z"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div id="worklist-summary" class="worklist-summary" role="status" aria-live="polite">等待同步</div>
+        <div id="worklist-list" class="worklist-list" aria-live="polite"></div>
+      </section>
+
+      <div class="sidebar-footer">
+        <span id="status-badge" class="badge" role="status" aria-live="polite" aria-atomic="true" aria-label="启动中…" title="启动中…">
+          <span class="status-dot"></span>
+          <span id="status-text">启动中…</span>
+        </span>
+        <button id="sidebar-settings-btn" class="sidebar-settings-btn" type="button">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>设置</span>
+          <span id="app-version" class="sidebar-version" aria-label="当前版本 0.1.0" title="SecHeur Agent 0.1.0">v0.1.0</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <main id="main">
+      <section id="goal-plan-panel" class="goal-plan-panel hidden" aria-label="目标执行进度" aria-hidden="true">
+        <div class="goal-plan-head">
+          <div>
+            <div class="goal-plan-kicker">目标任务</div>
+            <div id="goal-plan-summary" class="goal-plan-summary" aria-live="polite" aria-atomic="true">等待拆分任务</div>
+          </div>
+          <button id="goal-plan-toggle" class="icon-btn ghost goal-plan-toggle" type="button" title="展开目标任务" aria-label="展开目标任务" aria-controls="goal-plan-list" aria-expanded="false">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+        </div>
+        <ol id="goal-plan-list" class="goal-plan-list" aria-label="目标任务步骤"></ol>
+      </section>
+
+      <section id="messages" class="empty">
+        <div class="empty-state">
+          <svg class="empty-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <div class="empty-title">欢迎</div>
+          <div class="empty-sub">今天想构建什么？输入 <code>/help</code> 查看可用指令。</div>
+          <section class="benchmark-entry-panel" aria-label="安全场景实验结果">
+            <div class="benchmark-entry-action">
+              <div>
+                <span class="benchmark-entry-kicker">CTF BENCHMARK</span>
+                <h2>查看场景结果</h2>
+                <p>进入看板，查看 4 个安全场景的完整报告和最终结论。</p>
+              </div>
+              <div class="benchmark-entry-links">
+                <a id="benchmark-dashboard-btn" class="benchmark-dashboard-btn" href="/benchmark-dashboard/">
+                  <span>进入看板</span>
+                  <svg class="benchmark-dashboard-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14m-6-6 6 6-6 6"/>
+                  </svg>
+                </a>
+                <a id="changelog-btn" class="benchmark-dashboard-btn benchmark-changelog-btn" href="/updates.html">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7M12 7v5l3 2"/>
+                  </svg>
+                  <span>更新日志</span>
+                </a>
+              </div>
+            </div>
+            <div class="benchmark-entry-results" aria-label="安全场景">
+              <button class="scenario-grid-card" type="button" aria-haspopup="dialog" aria-controls="benchmark-scenario-dialog" data-benchmark-scenario="REV-01" data-scenario-title="逆向分析 · 授权校验程序" data-scenario-description="通过静态反编译与动态调试分析核心授权算法，成功定位关键跳转指令并生成有效注册凭证。">
+                <span class="scenario-card-top">
+                  <span class="scenario-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2zM9 9h6v6H9z"/></svg>
+                  </span>
+                  <span class="scenario-card-status">已完成</span>
+                </span>
+                <span class="scenario-card-copy"><span class="scenario-card-title">逆向分析</span><span class="scenario-card-subtitle">授权校验程序</span></span>
+              </button>
+              <button class="scenario-grid-card" type="button" aria-haspopup="dialog" aria-controls="benchmark-scenario-dialog" data-benchmark-scenario="IR-02" data-scenario-title="应急响应 · 异常登录排查" data-scenario-description="针对服务器异常 SSH 登录日志及可疑进程进行取证溯源，成功提取攻击者 IP 及持久化后门样本。">
+                <span class="scenario-card-top">
+                  <span class="scenario-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4m5.6-4A12 12 0 0 1 12 3a12 12 0 0 1-8.6 3A12 12 0 0 0 12 21a12 12 0 0 0 8.6-15z"/></svg>
+                  </span>
+                  <span class="scenario-card-status">已完成</span>
+                </span>
+                <span class="scenario-card-copy"><span class="scenario-card-title">应急响应</span><span class="scenario-card-subtitle">异常登录排查</span></span>
+              </button>
+              <button class="scenario-grid-card" type="button" aria-haspopup="dialog" aria-controls="benchmark-scenario-dialog" data-benchmark-scenario="VULN-03" data-scenario-title="漏洞挖掘 · 登录模块审计" data-scenario-description="对身份认证模块进行白盒代码审计，发现 SQL 注入与 JWT 签名校验绕过隐患并完成 PoC 验证。">
+                <span class="scenario-card-top">
+                  <span class="scenario-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m10 20 4-16m4 4 4 4-4 4M6 16l-4-4 4-4"/></svg>
+                  </span>
+                  <span class="scenario-card-status">已完成</span>
+                </span>
+                <span class="scenario-card-copy"><span class="scenario-card-title">漏洞挖掘</span><span class="scenario-card-subtitle">登录模块审计</span></span>
+              </button>
+              <button class="scenario-grid-card" type="button" aria-haspopup="dialog" aria-controls="benchmark-scenario-dialog" data-benchmark-scenario="PENTEST-04" data-scenario-title="渗透测试 · 订单 API 越权" data-scenario-description="发现核心业务订单查询接口存在 IDOR 水平越权漏洞，攻击者可遍历获取任意用户敏感订单报文。">
+                <span class="scenario-card-top">
+                  <span class="scenario-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9 3 3-3 3m5 0h3M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                  </span>
+                  <span class="scenario-card-status">已完成</span>
+                </span>
+                <span class="scenario-card-copy"><span class="scenario-card-title">渗透测试</span><span class="scenario-card-subtitle">订单 API 越权</span></span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div id="composer-wrap">
+        <div id="slash-autocomplete" class="slash-autocomplete hidden" role="listbox" aria-label="Slash 指令补全" aria-hidden="true"></div>
+        <button id="new-content-btn" class="new-content-btn hidden" type="button" aria-label="跳到最新消息" title="跳到最新消息" aria-hidden="true" tabindex="-1">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 5v14"/>
+            <path d="m6 13 6 6 6-6"/>
+          </svg>
+          <span>新内容</span>
+        </button>
+        <div id="composer" aria-busy="false">
+          <div id="composer-activity" class="composer-activity hidden" role="status" aria-live="polite" aria-atomic="true">
+            <span class="composer-activity-dot" aria-hidden="true"></span>
+            <span id="composer-activity-text">等待任务</span>
+          </div>
+          <div id="image-previews" class="image-previews"></div>
+          <input id="composer-file-input" class="sr-only" type="file" multiple aria-label="选择附件">
+          <div class="input-shell">
+            <div id="slash-highlight" class="slash-highlight" aria-hidden="true"></div>
+            <textarea id="input" rows="1" placeholder="输入消息，或输入 /help" aria-label="消息输入框" title="输入消息，或输入 /help" aria-controls="slash-autocomplete" aria-expanded="false"></textarea>
+          </div>
+          <div class="planning-controls">
+            <label class="planning-selector" title="仅用于新会话，已有会话保留原模式">
+              <span>新会话 PLAN</span>
+              <select id="new-session-plan" aria-label="新会话 PLAN" disabled>
+                <option value="">加载中</option>
+                <option value="progressive">Progressive</option>
+                <option value="cairn">Cairn</option>
+                <option value="hypothesis">Hypothesis · 假设图</option>
+                <option value="artex">Artex · 探索图</option>
+              </select>
+            </label>
+            <button id="new-plan-session-btn" class="composer-tool-btn" type="button" title="以所选 PLAN 新建会话">新建</button>
+            <button id="artex-graph-btn" class="composer-tool-btn" type="button">查看探索图</button>
+            <dialog id="artex-graph-dialog" style="width:80vw;max-height:80vh;overflow:auto">
+              <button id="artex-graph-close" type="button">关闭</button>
+              <div id="artex-graph-content"></div>
+            </dialog>
+            <div id="new-session-plan-status" class="planning-selection-status" role="status">仅对新会话生效</div>
+          </div>
+          <div class="composer-bottom">
+            <div class="composer-tools">
+              <button id="composer-add-btn" class="composer-tool-btn" type="button" title="添加附件" aria-label="添加附件">
+                <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
+              <label class="composer-select-wrap permission-select-wrap" title="权限模式">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z"/>
+                  <path d="M12 8v5"/>
+                  <path d="M12 16h.01"/>
+                </svg>
+                <select id="composer-permission-mode" aria-label="权限模式">
+                  <option value="default">默认权限</option>
+                  <option value="acceptEdits">自动接受编辑</option>
+                  <option value="dontAsk">自动审查</option>
+                  <option value="bypassPermissions">完全访问权限</option>
+                  <option value="plan">计划模式</option>
+                </select>
+              </label>
+              <label class="composer-skill-toggle" title="启用 heuristic-learning skill">
+                <input id="composer-heuristic-learning" type="checkbox" aria-label="启用 heuristic-learning skill">
+                <span class="composer-skill-toggle-pill">
+                  <span class="composer-skill-toggle-dot" aria-hidden="true"></span>
+                  <span>启发式学习</span>
+                </span>
+              </label>
+              <label class="composer-skill-toggle" title="启用 Web Verb typed actions">
+                <input id="composer-web-verbs" type="checkbox" aria-label="启用 Web Verb typed actions">
+                <span class="composer-skill-toggle-pill">
+                  <span class="composer-skill-toggle-dot" aria-hidden="true"></span>
+                  <span>Web Verb</span>
+                </span>
+              </label>
+            </div>
+            <div class="composer-tools composer-tools-right">
+              <label class="composer-select-wrap model-select-wrap" title="模型">
+                <select id="composer-llm" aria-label="模型"></select>
+              </label>
+              <label class="composer-select-wrap api-model-select-wrap" title="API 模型">
+                <select id="composer-api-model" aria-label="API 模型" disabled>
+                  <option value="">API 模型</option>
+                </select>
+              </label>
+            </div>
+            <button id="send-btn" class="send-btn" type="button" title="输入消息或添加文件后发送" aria-label="输入消息或添加文件后发送">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section id="temp-agent-float" class="temp-agent-float hidden" aria-label="临时智能体状态" aria-live="polite" aria-hidden="true">
+      <div class="temp-agent-float-head">
+        <div>
+          <div class="temp-agent-float-kicker">临时智能体</div>
+          <div id="temp-agent-float-title" class="temp-agent-float-title">未运行</div>
+        </div>
+        <div class="temp-agent-float-actions">
+          <span id="temp-agent-float-status" class="temp-agent-float-status">空闲</span>
+          <button id="temp-agent-float-toggle" class="icon-btn ghost" type="button" title="收起" aria-label="收起临时智能体对话" aria-controls="temp-agent-float-dialog" aria-expanded="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+          <button id="temp-agent-float-close" class="icon-btn ghost" type="button" title="关闭" aria-label="关闭临时智能体状态">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="temp-agent-float-dialog" class="temp-agent-float-dialog"></div>
+    </section>
+
+    <button id="trajectory-viewer-trigger" class="trajectory-viewer-trigger" type="button" title="查看会话轨迹" aria-label="查看会话轨迹" aria-haspopup="dialog" aria-controls="trajectory-viewer">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 6h7M4 12h12M4 18h16"/>
+        <circle cx="14" cy="6" r="2"/>
+        <circle cx="19" cy="12" r="2"/>
+        <circle cx="9" cy="18" r="2"/>
+      </svg>
+    </button>
+
+    <section id="trajectory-viewer" class="trajectory-viewer hidden" role="dialog" aria-modal="true" aria-labelledby="trajectory-viewer-title" aria-hidden="true">
+      <div class="trajectory-viewer-shell">
+        <header class="trajectory-viewer-header">
+          <div class="trajectory-viewer-heading">
+            <span class="trajectory-viewer-kicker">SESSION INSPECTION</span>
+            <h2 id="trajectory-viewer-title">Trajectory</h2>
+            <p id="trajectory-viewer-subtitle">当前会话</p>
+          </div>
+          <dl class="trajectory-viewer-stats" aria-label="轨迹统计">
+            <div><dt>Duration</dt><dd id="trajectory-stat-duration">0.0s</dd></div>
+            <div><dt>Turns</dt><dd id="trajectory-stat-turns">0</dd></div>
+            <div><dt>Calls</dt><dd id="trajectory-stat-calls">0</dd></div>
+          </dl>
+          <div class="trajectory-viewer-actions">
+            <label class="trajectory-search">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+              </svg>
+              <span class="sr-only">搜索轨迹</span>
+              <input id="trajectory-search-input" type="search" placeholder="搜索事件或内容" autocomplete="off" spellcheck="false">
+            </label>
+            <button id="trajectory-refresh" class="trajectory-icon-button" type="button" title="刷新轨迹" aria-label="刷新轨迹">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6v5h-5"/><path d="M4 18v-5h5"/><path d="M6.1 9a7 7 0 0 1 11.5-2.6L20 11M4 13l2.4 4.6A7 7 0 0 0 17.9 15"/>
+              </svg>
+            </button>
+            <button id="trajectory-close" class="trajectory-icon-button" type="button" title="关闭轨迹" aria-label="关闭轨迹">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="trajectory-timeline" aria-label="Input、Model 和 Tools 时间轨">
+          <div class="trajectory-timeline-labels" aria-hidden="true">
+            <span>Input</span><span>Model</span><span>Tools</span>
+          </div>
+          <div id="trajectory-timeline-track" class="trajectory-timeline-track" role="group" aria-label="轨迹时间轴">
+            <span class="trajectory-timeline-line" data-lane="input"></span>
+            <span class="trajectory-timeline-line" data-lane="model"></span>
+            <span class="trajectory-timeline-line" data-lane="tools"></span>
+            <div id="trajectory-timeline-spans" class="trajectory-timeline-spans"></div>
+          </div>
+        </div>
+
+        <div class="trajectory-viewer-workspace">
+          <section class="trajectory-ledger" aria-label="轨迹记录">
+            <div id="trajectory-loading" class="trajectory-status" role="status" aria-live="polite">正在读取轨迹…</div>
+            <div class="trajectory-table-wrap">
+              <table class="trajectory-table">
+                <colgroup><col class="trajectory-event-column"><col><col class="trajectory-duration-column"></colgroup>
+                <thead><tr><th>Event</th><th>Content</th><th>Time</th></tr></thead>
+                <tbody id="trajectory-records"></tbody>
+              </table>
+            </div>
+          </section>
+          <aside id="trajectory-detail" class="trajectory-detail" aria-label="记录详情" aria-live="polite">
+            <div class="trajectory-detail-empty">选择一条记录查看详情。</div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings modal -->
+    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-hidden="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-body settings-modal-body">
+        <div class="modal-header">
+          <h2 id="settings-title">设置</h2>
+          <button class="icon-btn ghost" id="close-settings" type="button" title="关闭设置" aria-label="关闭设置">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content settings-shell">
+          <nav class="settings-nav-list" aria-label="设置分区">
+            <button class="settings-nav-btn active" type="button" data-settings-section="general">外观</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="behavior">行为</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="judge">进度判定</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="model">后端</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="api">API</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="runtime">运行时</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="memory">记忆</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="mcp">MCP</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="plugins">插件</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="skills">技能</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="agents">Agent</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="tools">工具</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="sessions">项目</button>
+            <button class="settings-nav-btn" type="button" data-settings-section="diagnostics">诊断</button>
+          </nav>
+          <div class="settings-panels">
+            <section class="settings-section-panel active" data-settings-panel="general">
+              <div class="settings-section-heading">
+                <h3>外观</h3>
+                <p>调整 SecHeur Agent 的基础外观设置，保存后会立即影响当前桌面端 UI。</p>
+              </div>
+              <div class="settings-form-grid">
+                <div class="form-row theme-form-row">
+                  <label id="cfg-theme-label" for="cfg-theme">主题</label>
+                  <input id="cfg-theme" type="hidden" value="white">
+                  <div id="theme-picker" class="theme-picker" role="radiogroup" aria-labelledby="cfg-theme-label"></div>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-ui-scale">界面缩放</label>
+                  <input id="cfg-ui-scale" type="number" min="80" max="140" step="5" placeholder="100">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-canvas-width">对话宽度</label>
+                  <select id="cfg-canvas-width">
+                    <option value="narrow">窄</option>
+                    <option value="comfortable">舒适</option>
+                    <option value="wide">宽</option>
+                    <option value="full">满宽</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-user-msg-color">用户消息颜色</label>
+                  <input id="cfg-user-msg-color" type="color" value="#2563eb">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-ui-font">界面字体</label>
+                  <input id="cfg-ui-font" type="text" placeholder="-apple-system">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-code-font">代码字体</label>
+                  <input id="cfg-code-font" type="text" placeholder="SF Mono">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-code-font-size">代码字号</label>
+                  <input id="cfg-code-font-size" type="number" min="11" max="18" step="1" placeholder="13">
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="behavior">
+              <div class="settings-section-heading">
+                <h3>行为</h3>
+                <p>输入、streaming、Browser Agent、代理、通知和本地 shell 偏好。</p>
+              </div>
+              <div class="form-row">
+                <label for="cfg-send-shortcut">发送快捷键</label>
+                <select id="cfg-send-shortcut">
+                  <option value="enter">Enter</option>
+                  <option value="cmd-enter">Cmd/Ctrl + Enter</option>
+                </select>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-streaming-enabled" type="checkbox">
+                <span>启用 streaming 输出</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-browser-agent-enabled" type="checkbox">
+                <span>启用 Browser Agent 偏好</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-browser-agent-builtin" type="checkbox">
+                <span>优先使用内置 Browser Agent</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-browser-agent-fallback" type="checkbox">
+                <span>允许外部 browser provider fallback</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-system-proxy-enabled" type="checkbox">
+                <span>启用系统代理偏好</span>
+              </label>
+              <div class="form-row">
+                <label for="cfg-system-proxy-url">系统代理地址</label>
+                <input id="cfg-system-proxy-url" type="text" placeholder="http://127.0.0.1:7890">
+              </div>
+              <div class="form-row">
+                <label for="cfg-terminal-shell">终端 Shell 路径</label>
+                <input id="cfg-terminal-shell" type="text" placeholder="/bin/zsh">
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-notification-sounds" type="checkbox">
+                <span>启用通知声音</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-system-notification" type="checkbox">
+                <span>启用系统通知</span>
+              </label>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="judge">
+              <div class="settings-section-heading">
+                <h3>进度判定</h3>
+                <p>每 N 轮由独立 LLM 评估主 agent 是否偏离目标、卡住或已找到 flag，并将提示注入到主循环。失败不会中断主任务。</p>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-judge-enabled" type="checkbox" data-setting="judge" data-judge-key="enabled">
+                <span>启用进度判定</span>
+              </label>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-judge-every-n-turns">每 N 轮评估一次</label>
+                  <input id="cfg-judge-every-n-turns" type="number" min="1" max="50" step="1" placeholder="5" data-setting="judge" data-judge-key="every_n_turns">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-judge-model-profile">判定模型</label>
+                  <select id="cfg-judge-model-profile" data-setting="judge" data-judge-key="model_profile">
+                    <option value="">使用主 Agent 默认模型</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-judge-max-history-messages">参与判定的最近消息数</label>
+                  <input id="cfg-judge-max-history-messages" type="number" min="2" max="20" step="1" placeholder="8" data-setting="judge" data-judge-key="max_history_messages">
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="model">
+              <div class="settings-section-heading">
+                <h3>后端</h3>
+                <p>API key 文件以及多 engine 路径偏好。模型在输入条直接切换。</p>
+              </div>
+              <div class="form-row">
+                <label>API Keys</label>
+                <div class="btn-row">
+                  <button class="btn" type="button" data-settings-section="api">管理 API</button>
+                </div>
+                <small>在设置里保存 API 配置，不需要手动编辑 <code>mykey.py</code>。</small>
+              </div>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-backend-mode">后端模式</label>
+                  <select id="cfg-backend-mode">
+                    <option value="local">local</option>
+                    <option value="remote">remote</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="api">
+              <div class="settings-section-heading">
+                <h3>API</h3>
+                <p>直接添加或更新模型 API。API Key 留空会保留当前已保存的 Key。</p>
+              </div>
+              <div id="api-config-status" class="settings-note">正在读取当前 API 配置…</div>
+              <div class="settings-list-toolbar">
+                <span id="api-profile-count">正在读取 API profile…</span>
+                <button class="btn" type="button" id="reload-api-config">重新读取</button>
+              </div>
+              <div id="api-profile-list" class="registry-list"></div>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-api-type">接口类型</label>
+                  <select id="cfg-api-type">
+                    <option value="native_oai">OpenAI 兼容接口</option>
+                    <option value="native_anthropic">Anthropic 兼容接口</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-name">显示名称</label>
+                  <input id="cfg-api-name" type="text" placeholder="例如：deepseek">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-base">API Base</label>
+                  <input id="cfg-api-base" type="text" placeholder="https://api.openai.com/v1">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-model">Model</label>
+                  <div class="api-model-picker">
+                    <input id="cfg-api-model" type="text" placeholder="先获取模型，或手动输入 model id">
+                    <button class="btn" type="button" id="fetch-api-models">获取模型</button>
+                    <select id="cfg-api-model-select" aria-label="选择模型" disabled>
+                      <option value="">点击获取模型后选择</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-key">API Key</label>
+                  <input id="cfg-api-key" type="password" autocomplete="new-password" placeholder="留空则保留当前 Key">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-mode">API Mode</label>
+                  <select id="cfg-api-mode">
+                    <option value="chat_completions">chat_completions</option>
+                    <option value="responses">responses</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-thinking">Thinking</label>
+                  <select id="cfg-api-thinking">
+                    <option value="adaptive">adaptive</option>
+                    <option value="enabled">enabled</option>
+                    <option value="disabled">disabled</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-api-proxy">HTTP 代理</label>
+                  <input id="cfg-api-proxy" type="text" placeholder="可选，例如 http://127.0.0.1:7890">
+                </div>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-api-relay-compat" type="checkbox">
+                <span>兼容中转请求头</span>
+              </label>
+              <div class="settings-command-row">
+                <button class="btn primary" type="button" id="save-api-config">保存 API 配置</button>
+                <button class="btn" type="button" id="test-api-response">测试响应</button>
+                <button class="btn" type="button" id="clear-api-config">新建 / 清空</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="runtime">
+              <div class="settings-section-heading">
+                <h3>运行时</h3>
+                <p>预算、轮次和 thinking 模式会通过 agent slash 命令应用。</p>
+              </div>
+              <div class="form-row">
+                <label for="cfg-max-turns">最大轮次</label>
+                <input id="cfg-max-turns" type="number" min="0" step="1" placeholder="0 表示不限制">
+              </div>
+              <div class="form-row">
+                <label for="cfg-max-cost">最大费用</label>
+                <input id="cfg-max-cost" type="number" min="0" step="0.01" placeholder="0 表示不限制">
+              </div>
+              <div class="form-row">
+                <label for="cfg-thinking">扩展思考</label>
+                <select id="cfg-thinking">
+                  <option value="adaptive">自适应</option>
+                  <option value="enabled">启用</option>
+                  <option value="disabled">禁用</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="cfg-thinking-budget">思考预算</label>
+                <input id="cfg-thinking-budget" type="number" min="0" step="1" placeholder="自动">
+              </div>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-agent-output-idle-timeout">输出空闲超时（秒）</label>
+                  <input id="cfg-agent-output-idle-timeout" type="number" min="30" step="10" placeholder="600">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-agent-first-output-timeout">首次输出超时（秒）</label>
+                  <input id="cfg-agent-first-output-timeout" type="number" min="30" step="10" placeholder="120">
+                </div>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-auto-compaction" type="checkbox">
+                <span>启用自动上下文压缩偏好</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-attempt-dedup" type="checkbox">
+                <span>启用状态感知的重复尝试防护</span>
+              </label>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-auto-compaction-threshold">压缩阈值 %</label>
+                  <input id="cfg-auto-compaction-threshold" type="number" min="50" max="95" step="5" placeholder="85">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-hot-runtimes">最大热运行时</label>
+                  <input id="cfg-hot-runtimes" type="number" min="0" max="8" step="1" placeholder="1">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-warm-runtimes">最大温运行时</label>
+                  <input id="cfg-warm-runtimes" type="number" min="0" max="8" step="1" placeholder="1">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-warm-ttl">温运行时 TTL 秒数</label>
+                  <input id="cfg-warm-ttl" type="number" min="60" step="60" placeholder="7200">
+                </div>
+              </div>
+              <div class="settings-command-row">
+                <button class="btn" type="button" data-settings-command="apply-runtime">应用运行参数</button>
+                <button class="btn" type="button" data-settings-command="restart-bridge">重启 bridge</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="memory">
+              <div class="settings-section-heading">
+                <h3>记忆</h3>
+                <p>通过 agent 工具执行语义召回。</p>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-memory-enabled" type="checkbox">
+                <span>启用记忆引用提示</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-knowledge-base-enabled" type="checkbox">
+                <span>启用攻击知识库</span>
+              </label>
+              <div class="form-row">
+                <label for="cfg-memory-query">搜索记忆</label>
+                <input id="cfg-memory-query" type="text" placeholder="输入要召回的主题">
+              </div>
+              <div class="settings-command-row">
+                <button class="btn" type="button" id="run-memory-search">运行 memory_search</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="mcp">
+              <div class="settings-section-heading">
+                <h3>MCP</h3>
+                <p>默认读取项目目录下的 <code>settings.json</code>、<code>settings.local.json</code>、<code>.secheur-agent/settings.json</code>、<code>.secheur-agent/settings.local.json</code>、<code>.secheur-agent/mcp.json</code> 与 <code>.mcp.json</code>。</p>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-mcp-autorefresh" type="checkbox">
+                <span>新会话后自动刷新 MCP</span>
+              </label>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-mcp-name">Server 名称</label>
+                  <input id="cfg-mcp-name" type="text" placeholder="例如：filesystem">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-command">启动命令</label>
+                  <input id="cfg-mcp-command" type="text" placeholder="例如：npx">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-url">HTTP URL</label>
+                  <input id="cfg-mcp-url" type="url" placeholder="例如：https://example.com/mcp">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-args">参数</label>
+                  <input id="cfg-mcp-args" type="text" placeholder="-y @modelcontextprotocol/server-filesystem .">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-cwd">工作目录</label>
+                  <input id="cfg-mcp-cwd" type="text" placeholder="可选，默认使用项目目录">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-env">环境变量 JSON</label>
+                  <textarea id="cfg-mcp-env" rows="3" placeholder="{&quot;TOKEN&quot;:&quot;...&quot;}"></textarea>
+                </div>
+                <div class="form-row">
+                  <label for="cfg-mcp-headers">HTTP Headers JSON</label>
+                  <textarea id="cfg-mcp-headers" rows="3" placeholder="{&quot;Authorization&quot;:&quot;Bearer ...&quot;}"></textarea>
+                </div>
+              </div>
+              <div class="settings-list-toolbar">
+                <span id="mcp-list-count">正在读取 MCP…</span>
+                <input id="mcp-registry-filter" class="registry-filter-input" type="search" placeholder="筛选 MCP">
+                <button class="btn" type="button" data-settings-command="reload-registry">重新扫描</button>
+              </div>
+              <div id="mcp-source-paths" class="registry-source-note"></div>
+              <div id="mcp-registry-list" class="registry-list"></div>
+              <div class="settings-command-row">
+                <button class="btn primary" type="button" id="save-mcp-config">保存 MCP Server</button>
+                <button class="btn" type="button" id="clear-mcp-config">新建 / 清空</button>
+                <button class="btn" type="button" id="run-mcp-refresh">刷新 MCP 工具</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="plugins">
+              <div class="settings-section-heading">
+                <h3>Pi 插件</h3>
+                <p>Pi package / extension</p>
+              </div>
+              <div class="settings-form-grid plugin-install-grid">
+                <div class="form-row">
+                  <label for="cfg-plugin-source">安装源</label>
+                  <input id="cfg-plugin-source" type="text" placeholder="npm:@scope/plugin、Git URL 或本地路径" spellcheck="false">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-plugin-scope">配置范围</label>
+                  <select id="cfg-plugin-scope">
+                    <option value="user">当前 SecHeur Agent</option>
+                    <option value="project">项目 .pi</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-command-row plugin-install-actions">
+                <button class="btn primary" type="button" id="install-plugin">安装</button>
+                <button class="btn" type="button" id="reload-plugins">刷新</button>
+              </div>
+              <div id="plugin-status" class="settings-note" role="status" aria-live="polite">正在读取插件…</div>
+              <div class="settings-list-toolbar">
+                <span id="plugins-list-count">正在读取插件…</span>
+                <input id="plugins-filter" class="registry-filter-input" type="search" placeholder="筛选插件">
+              </div>
+              <div id="plugins-source-paths" class="registry-source-note"></div>
+              <div id="plugins-list" class="registry-list plugin-list"></div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="skills">
+              <div class="settings-section-heading">
+                <h3>技能</h3>
+                <p>调用 skill 工具，支持 inline 或 fork 子 Agent 的执行由后端决定。</p>
+              </div>
+              <div class="form-row">
+                <label for="cfg-skill-name">技能名称</label>
+                <input id="cfg-skill-name" type="text" placeholder="例如：python-design">
+              </div>
+              <div class="form-row">
+                <label for="cfg-skill-args">参数</label>
+                <input id="cfg-skill-args" type="text" placeholder="可选参数">
+              </div>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-skill-description">技能描述</label>
+                  <input id="cfg-skill-description" type="text" placeholder="这个 skill 适合什么时候使用">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-skill-context">执行模式</label>
+                  <select id="cfg-skill-context">
+                    <option value="inline">inline</option>
+                    <option value="fork">fork 子 Agent</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <label for="cfg-skill-body">SKILL.md 正文</label>
+                <textarea id="cfg-skill-body" rows="6" placeholder="写入该 skill 的具体执行说明，支持 $ARGUMENTS。"></textarea>
+              </div>
+              <div class="form-row">
+                <label for="cfg-custom-skill-dirs">自定义技能目录</label>
+                <textarea id="cfg-custom-skill-dirs" rows="3" placeholder="一行一个目录"></textarea>
+                <small>新建 Skill 保存到 <code>.secheur-agent/skills/</code>，同时兼容扫描 <code>skill/</code> 和 <code>skills/</code>。</small>
+              </div>
+              <div class="settings-list-toolbar">
+                <span id="skills-list-count">正在读取技能…</span>
+                <input id="skills-registry-filter" class="registry-filter-input" type="search" placeholder="筛选技能">
+                <button class="btn" type="button" data-settings-command="reload-registry">重新扫描</button>
+              </div>
+              <div id="skills-source-paths" class="registry-source-note"></div>
+              <div id="skills-registry-list" class="registry-list"></div>
+              <div class="settings-command-row">
+                <button class="btn primary" type="button" id="save-skill-config">保存 Skill</button>
+                <button class="btn" type="button" id="clear-skill-config">新建 / 清空</button>
+                <button class="btn" type="button" id="run-skill">运行 skill</button>
+                <button class="btn" type="button" data-settings-command="search-skills">搜索技能</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="agents">
+              <div class="settings-section-heading">
+                <h3>Agent</h3>
+                <p>管理内置 sub-agent 和项目 <code>.secheur-agent/agents/</code> 下的自定义 Agent。</p>
+              </div>
+              <div class="form-row">
+                <label for="cfg-agent-name">Agent 名称</label>
+                <input id="cfg-agent-name" type="text" placeholder="例如：incident-reviewer">
+              </div>
+              <div class="settings-form-grid">
+                <div class="form-row">
+                  <label for="cfg-agent-description">Agent 描述</label>
+                  <input id="cfg-agent-description" type="text" placeholder="这个 Agent 擅长什么">
+                </div>
+                <div class="form-row">
+                  <label for="cfg-agent-tools">允许工具</label>
+                  <input id="cfg-agent-tools" type="text" placeholder="file_read,grep_search,list_files">
+                </div>
+              </div>
+              <div class="form-row">
+                <label for="cfg-agent-when">使用场景</label>
+                <input id="cfg-agent-when" type="text" placeholder="什么时候应调用这个 Agent">
+              </div>
+              <div class="form-row">
+                <label for="cfg-agent-body">Agent 指令正文</label>
+                <textarea id="cfg-agent-body" rows="6" placeholder="写入该 Agent 的具体执行说明，支持 $TASK。"></textarea>
+              </div>
+              <div class="settings-list-toolbar">
+                <span id="agents-list-count">正在读取 Agent…</span>
+                <input id="agents-registry-filter" class="registry-filter-input" type="search" placeholder="筛选 Agent">
+                <button class="btn" type="button" data-settings-command="reload-registry">重新扫描</button>
+              </div>
+              <div id="agents-source-paths" class="registry-source-note"></div>
+              <div id="agents-registry-list" class="registry-list"></div>
+              <div class="settings-command-row">
+                <button class="btn primary" type="button" id="save-agent-config">保存 Agent</button>
+                <button class="btn" type="button" id="clear-agent-config">新建 / 清空</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="tools">
+              <div class="settings-section-heading">
+                <h3>工具</h3>
+                <p>显示内置工具和延迟加载工具，开关状态保存在项目默认配置目录。</p>
+              </div>
+              <div class="settings-list-toolbar">
+                <span id="tools-list-count">正在读取工具…</span>
+                <input id="tools-registry-filter" class="registry-filter-input" type="search" placeholder="筛选工具">
+                <button class="btn" type="button" data-settings-command="reload-registry">重新扫描</button>
+              </div>
+              <div id="tools-source-paths" class="registry-source-note"></div>
+              <div id="tools-registry-list" class="registry-list registry-list-compact"></div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="sessions">
+              <div class="settings-section-heading">
+                <h3>项目</h3>
+                <p>会话管理、Git 预载和打开方式偏好。</p>
+              </div>
+              <label class="toggle-row">
+                <input id="cfg-preload-git-diffs" type="checkbox">
+                <span>预加载 Git diff 偏好</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-auto-open-file" type="checkbox">
+                <span>自动打开 agent 提到的文件</span>
+              </label>
+              <label class="toggle-row">
+                <input id="cfg-diff-expanded" type="checkbox">
+                <span>Diff 默认展开</span>
+              </label>
+              <div class="form-row">
+                <label for="cfg-open-app-targets">打开方式</label>
+                <textarea id="cfg-open-app-targets" rows="3" placeholder="例如：Finder, VS Code, Terminal"></textarea>
+              </div>
+              <div class="settings-command-row">
+                <button class="btn" type="button" data-session-action="new">新建会话</button>
+                <button class="btn" type="button" data-session-action="clear">清空当前显示</button>
+                <button class="btn" type="button" data-session-action="stop">停止当前任务</button>
+                <button class="btn" type="button" data-session-action="restart">重启 bridge</button>
+              </div>
+            </section>
+
+            <section class="settings-section-panel" data-settings-panel="diagnostics">
+              <div class="settings-section-heading">
+                <h3>诊断</h3>
+                <p>查看 bridge、轮询和前端错误日志。</p>
+              </div>
+              <pre id="settings-diagnostics-log" class="settings-diagnostics-log">暂无诊断日志。</pre>
+              <div class="settings-command-row">
+                <button class="btn" type="button" data-settings-command="open-diagnostics">弹出诊断面板</button>
+                <button class="btn" type="button" data-settings-command="copy-diagnostics">复制日志</button>
+                <button class="btn" type="button" data-settings-command="clear-diagnostics">清空日志</button>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn ghost" id="cancel-settings">取消</button>
+          <button class="btn primary" id="save-settings">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="diagnostics-panel" class="diagnostics-panel hidden" role="dialog" aria-modal="true" aria-labelledby="diagnostics-title" aria-hidden="true">
+      <div class="diagnostics-header">
+        <div>
+          <h2 id="diagnostics-title">诊断</h2>
+          <p>Bridge、polling 和前端事件日志。</p>
+        </div>
+        <button class="icon-btn ghost" id="diagnostics-close" type="button" title="关闭诊断" aria-label="关闭诊断">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <pre id="diagnostics-log" class="diagnostics-log">暂无诊断日志。</pre>
+      <div class="diagnostics-footer">
+        <button class="btn" type="button" id="diagnostics-copy">复制</button>
+        <button class="btn" type="button" id="diagnostics-clear">清空</button>
+      </div>
+    </div>
+
+    <div id="session-log-panel" class="session-log-panel hidden" role="dialog" aria-modal="true" aria-labelledby="session-log-title" aria-hidden="true">
+      <div class="diagnostics-header">
+        <div>
+          <h2 id="session-log-title">运行日志</h2>
+          <p id="session-log-subtitle">当前会话</p>
+        </div>
+        <button class="icon-btn ghost" id="session-log-close" type="button" title="关闭运行日志" aria-label="关闭运行日志">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <pre id="session-log-content" class="session-log-content">暂无运行日志。</pre>
+    </div>
+
+
+
+    <dialog id="benchmark-scenario-dialog" class="benchmark-scenario-dialog" aria-labelledby="benchmark-scenario-title" aria-describedby="benchmark-scenario-description">
+      <div class="benchmark-scenario-heading">
+        <span id="benchmark-scenario-code" class="benchmark-entry-kicker"></span>
+        <button id="benchmark-scenario-close" class="icon-btn ghost" type="button" aria-label="关闭场景概览" autofocus>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <h2 id="benchmark-scenario-title"></h2>
+      <p id="benchmark-scenario-description"></p>
+      <a class="benchmark-dashboard-btn" href="/benchmark-dashboard/">进入完整看板<svg class="benchmark-dashboard-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+    </dialog>
+
+    <!-- Error banner -->
+    <div id="error-banner" class="error-banner hidden" role="alert" aria-live="assertive" aria-atomic="true">
+      <span id="error-text"></span>
+      <button class="icon-btn ghost hidden" id="error-action" type="button"></button>
+      <button class="icon-btn ghost" id="error-dismiss" type="button" title="关闭提示" aria-label="关闭提示">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="vendor/marked.min.js"></script>
+  <script src="secheur-web.js?v=plan-selection-1"></script>
+  <script src="trajectory-viewer.js?v=deepseek-trajectory-3"></script>
+  <script src="app.js?v=benchmark-cards-20261020"></script>
+  <script src="desktop-plugins.js?v=conversation-trace-1"></script>
+</body>
+</html>

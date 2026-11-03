@@ -1,0 +1,18 @@
+{
+  "candidates": 329,
+  "cards_created": 11,
+  "input_records": 6124,
+  "max_evidence_per_variant": 3,
+  "min_score": 70,
+  "published": 11,
+  "rejected": 5795,
+  "rejection_reasons": {
+    "missing_actionable_procedure": 326,
+    "missing_cryptographic_relation": 25,
+    "missing_verification_signal": 221,
+    "no_supported_knowledge_point": 5169,
+    "record_does_not_independently_match_crypto_gate": 54
+  },
+  "review_queue": 0,
+  "schema": "crypto-kb-distillation.v1"
+}

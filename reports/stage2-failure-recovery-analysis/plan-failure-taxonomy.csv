@@ -1,0 +1,8 @@
+failure_type,affected_targets,count,severity,competition_impact,fix_complexity,expected_recovery_gain,priority
+SUPERVISOR_PARSE,"skilift,baby_crypt",2,high,removes two hard Planning aborts; one diagnostic was nondeterministic,low,likely 0-1,P0
+EXECUTOR_STARTUP_TIMEOUT,rpgo,1,medium,can restore a run that never reached a worker turn,medium,possible 0-1,P0
+TERMINAL_CONTRACT_ERROR,intercode-ctf/56,1,medium,"may recover a near-solve if evidence handoff, not solution quality, was the blocker",medium,possible 0-1,P0
+INFRA_UNRESOLVED,"22-back-to-the-past,noisy-crc",2,high,not a Planning behavior signal,medium,not a code gain,separate
+PLANNING_RUNTIME_TIMEOUT_UNKNOWN,stfu,1,high,needs lifecycle evidence before a behavior patch,high,speculative 0-1,P1
+NO_IMPROVEMENT_OR_MODEL_CAPABILITY,"rpgo,stfu",2,high,may remain hard after infrastructure fixes,high,speculative,P1
+RECOVERED,"avatar,intercode-ctf/17",2,observed,demonstrates fallback value,low,already counted,observed

@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecHeur Agent Benchmark Dashboard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7fb;
+      --bg-2: #ffffff;
+      --panel: rgba(255, 255, 255, 0.94);
+      --panel-strong: rgba(255, 255, 255, 0.98);
+      --line: rgba(15, 23, 42, 0.10);
+      --line-strong: rgba(59, 130, 246, 0.38);
+      --text: #0f172a;
+      --muted: #475569;
+      --muted-2: #64748b;
+      --blue: #0284c7;
+      --blue-2: #3b82f6;
+      --violet: #8b5cf6;
+      --green: #16a34a;
+      --amber: #d97706;
+      --red: #e11d48;
+      --cyan: #22d3ee;
+      --shadow: 0 20px 55px rgba(15, 23, 42, 0.10);
+      --shadow-soft: 0 12px 34px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+      --compact-gap: 10px;
+      --compact-panel-padding: 12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(2, 132, 199, 0.05), transparent 24%, rgba(139, 92, 246, 0.05) 52%, transparent 78%),
+        linear-gradient(135deg, #ffffff 0%, #f1f5f9 45%, #ffffff 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.18));
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .dashboard {
+      position: relative;
+      width: min(1880px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .dashboard-compact {
+      min-height: 100dvh;
+    }
+
+    .dashboard-carousel {
+      position: relative;
+      width: 66.6667%;
+      margin: 0 auto;
+      aspect-ratio: 1.92 / 1;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.90)),
+        rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      opacity: 0;
+      transform: translateX(18px);
+      transition: opacity 320ms ease, transform 320ms ease;
+      pointer-events: none;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .carousel-slide img {
+      display: block;
+      width: 100%;
+      height: calc(100% - 42px);
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 6px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      right: 14px;
+      bottom: 8px;
+      left: 14px;
+      z-index: 2;
+      color: #1e293b;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+    }
+
+    .carousel-dots {
+      position: absolute;
+      right: 16px;
+      bottom: 10px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .carousel-dot {
+      width: 6px;
+      height: 6px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.4);
+    }
+
+    .carousel-dot.active {
+      width: 18px;
+      background: var(--blue);
+    }
+
+    .dashboard-shell {
+      position: relative;
+      display: grid;
+      gap: 16px;
+    }
+
+    .dashboard-shell::before {
+      content: "";
+      position: absolute;
+      inset: -18px -20px;
+      z-index: -1;
+      border: 1px solid rgba(56, 189, 248, 0.14);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(226, 232, 240, 0.65), transparent 42%),
+        linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(139, 92, 246, 0.04));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .topbar-centered {
+      grid-template-columns: minmax(320px, 360px) minmax(0, 1fr) minmax(320px, 360px);
+      align-items: center;
+    }
+
+    .topbar-spacer {
+      min-height: 1px;
+    }
+
+    .agent-return-link {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 44px;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 10px;
+      color: #1e293b;
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: var(--shadow-soft);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      justify-self: start;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .agent-return-link:hover,
+    .agent-return-link:focus-visible {
+      border-color: rgba(96, 165, 250, 0.58);
+      background: rgba(219, 234, 254, 0.90);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .agent-return-link svg {
+      flex: 0 0 auto;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .topbar-centered .hero-copy {
+      text-align: center;
+    }
+
+    .topbar-centered .subtitle {
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 8px;
+      font-size: clamp(28px, 4vw, 54px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      text-shadow: 0 0 24px rgba(2, 132, 199, 0.16);
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin-top: 12px;
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .metric-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: var(--radius);
+      background: rgba(219, 234, 254, 0.55);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .ribbon-item {
+      min-height: 72px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.92));
+    }
+
+    .ribbon-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .ribbon-value {
+      margin-top: 8px;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ribbon-value.good {
+      color: var(--green);
+    }
+
+    .ribbon-value.warn {
+      color: var(--amber);
+    }
+
+    .status-strip {
+      min-width: 320px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(241, 245, 249, 0.80));
+      box-shadow: var(--shadow);
+      justify-self: end;
+    }
+
+    .status-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: #334155;
+      font-size: 13px;
+    }
+
+    .status-title strong {
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .score-bar {
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      height: 14px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .score-bar span:first-child {
+      background: linear-gradient(90deg, var(--blue), var(--blue-2));
+    }
+
+    .score-bar span:last-child {
+      background: linear-gradient(90deg, var(--violet), #c084fc);
+    }
+
+    .score-legend {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .kpi-card,
+    .panel,
+    .benchmark-card,
+    .todo-drawer {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.86));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .kpi-card {
+      position: relative;
+      min-height: 118px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--violet), var(--green));
+      opacity: 0.9;
+    }
+
+    .kpi-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      margin-top: 14px;
+      font-size: clamp(30px, 3.4vw, 48px);
+      font-weight: 900;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-note {
+      margin-top: 10px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.34fr 0.92fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .view-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: var(--radius);
+      background: rgba(241, 245, 249, 0.90);
+    }
+
+    .summary-card strong {
+      display: block;
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .summary-card span {
+      display: block;
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .panel-kicker {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .section-note {
+      margin: -2px 0 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      border-radius: var(--radius);
+      color: #475569;
+      background: rgba(224, 242, 254, 0.70);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      border-radius: 999px;
+      color: #1d4ed8;
+      background: rgba(14, 165, 233, 0.12);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 14px;
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: var(--radius);
+      background: rgba(241, 245, 249, 0.90);
+    }
+
+    .timeline-date {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .timeline-title {
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .timeline-desc {
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab-button {
+      min-height: 38px;
+      padding: 8px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 999px;
+      color: #334155;
+      background: rgba(255, 255, 255, 0.88);
+      transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .tab-button:active {
+      transform: translateY(1px);
+    }
+
+    .tab-button:hover,
+    .tab-button:focus-visible {
+      border-color: rgba(56, 189, 248, 0.78);
+      color: #0f172a;
+      outline: none;
+    }
+
+    .tab-button.active {
+      color: #07111f;
+      background: linear-gradient(135deg, var(--blue), #93c5fd);
+      border-color: transparent;
+      font-weight: 900;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .benchmark-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .benchmark-card {
+      position: relative;
+      min-height: 318px;
+      padding: 16px;
+      overflow: hidden;
+      transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .benchmark-card:hover,
+    .benchmark-card:focus-visible {
+      border-color: rgba(56, 189, 248, 0.58);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .benchmark-card::before {
+      content: attr(data-level);
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      color: rgba(203, 213, 225, 0.58);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .donut-wrap {
+      display: grid;
+      place-items: center;
+      margin-top: 28px;
+    }
+
+    .donut {
+      width: 148px;
+      height: 148px;
+      transform: rotate(-90deg);
+    }
+
+    .donut-bg {
+      fill: none;
+      stroke: rgba(203, 213, 225, 0.9);
+      stroke-width: 13;
+    }
+
+    .donut-value {
+      fill: none;
+      stroke: var(--blue);
+      stroke-linecap: round;
+      stroke-width: 13;
+      filter: drop-shadow(0 2px 6px rgba(2, 132, 199, 0.18));
+      transition: stroke-dashoffset 240ms ease;
+    }
+
+    .donut-center {
+      position: absolute;
+      text-align: center;
+    }
+
+    .donut-percent {
+      font-size: 34px;
+      font-weight: 950;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .donut-label {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .benchmark-name {
+      margin-top: 18px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .benchmark-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      color: #334155;
+      font-size: 12px;
+    }
+
+    .benchmark-desc {
+      margin-top: 12px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.62;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .flow span {
+      padding: 7px 9px;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: 6px;
+      color: #1d4ed8;
+      background: rgba(14, 165, 233, 0.1);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .category-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.05fr) minmax(320px, 0.95fr);
+      gap: 18px;
+      align-items: end;
+    }
+
+    .bar-chart {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      align-items: end;
+      min-height: 300px;
+      padding: 18px 12px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(to top, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        rgba(241, 245, 249, 0.90);
+      background-size: 100% 50px;
+    }
+
+    .bar-item {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      height: 260px;
+      align-content: end;
+    }
+
+    .bar-track {
+      position: relative;
+      display: flex;
+      align-items: end;
+      width: min(44px, 100%);
+      height: 210px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .bar-fill {
+      width: 100%;
+      min-height: 4px;
+      background: linear-gradient(180deg, #67e8f9, var(--blue-2), var(--violet));
+      border-radius: 999px 999px 0 0;
+    }
+
+    .bar-label {
+      color: #334155;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .bar-value {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .progress-row {
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: var(--radius);
+      background: rgba(241, 245, 249, 0.90);
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .progress-head span:last-child {
+      color: var(--blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      position: relative;
+      height: 9px;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--violet));
+    }
+
+    .progress-before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-left: 2px dashed rgba(223, 81, 53, 0.75);
+    }
+
+    .floating-todo {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 60;
+      display: grid;
+      justify-items: end;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .todo-fab,
+    .todo-drawer {
+      pointer-events: auto;
+    }
+
+    .todo-fab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 999px;
+      padding: 8px 14px 8px 18px;
+      color: #07111f;
+      background: linear-gradient(135deg, #67e8f9, #93c5fd);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.14);
+      font-weight: 900;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .todo-fab:hover,
+    .todo-fab:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      box-shadow: 0 22px 54px rgba(15, 23, 42, 0.16);
+    }
+
+    .todo-fab .pill {
+      min-height: 24px;
+      border-color: rgba(7, 17, 31, 0.18);
+      color: #07111f;
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    .todo-drawer {
+      width: min(380px, calc(100vw - 32px));
+      max-height: min(520px, calc(100dvh - 96px));
+      padding: 16px;
+      overflow: auto;
+      transform-origin: bottom right;
+      animation: drawer-in 180ms ease-out;
+    }
+
+    .todo-drawer[hidden] {
+      display: none;
+    }
+
+    @keyframes drawer-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .todo-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .todo-input {
+      min-height: 42px;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 7px;
+      padding: 0 12px;
+      color: var(--text);
+      background: rgba(226, 232, 240, 0.95);
+      outline: none;
+    }
+
+    .todo-input:focus {
+      border-color: rgba(56, 189, 248, 0.78);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    .todo-add,
+    .todo-clear {
+      min-height: 42px;
+      border: 0;
+      border-radius: 7px;
+      padding: 0 14px;
+      color: #06111f;
+      background: linear-gradient(135deg, var(--blue), #93c5fd);
+      font-weight: 900;
+    }
+
+    .todo-clear {
+      width: 100%;
+      margin-top: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: #334155;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .todo-list {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .todo-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 7px;
+      background: rgba(241, 245, 249, 0.90);
+    }
+
+    .todo-check {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--green);
+    }
+
+    .todo-text {
+      min-width: 0;
+      color: #1e293b;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .todo-item.done .todo-text {
+      color: var(--muted-2);
+      text-decoration: line-through;
+    }
+
+    .todo-delete {
+      min-width: 32px;
+      min-height: 32px;
+      border: 1px solid rgba(248, 113, 113, 0.28);
+      border-radius: 6px;
+      color: #b91c1c;
+      background: rgba(254, 226, 226, 0.8);
+      font-weight: 900;
+    }
+
+    .desktop-only {
+      display: inline;
+    }
+
+    .mt-16 {
+      margin-top: 16px;
+    }
+
+    .tooltip {
+      position: fixed;
+      z-index: 50;
+      max-width: 260px;
+      padding: 10px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      border-radius: 7px;
+      color: #0369a1;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      font-size: 12px;
+      line-height: 1.55;
+      pointer-events: none;
+      transform: translate(-50%, calc(-100% - 14px));
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 1280px) {
+      .dashboard {
+        width: min(1180px, calc(100vw - 28px));
+      }
+
+      .kpis,
+      .benchmark-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid,
+      .category-layout,
+      .view-summary,
+      .metric-ribbon {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 1180px) {
+      .dashboard-compact {
+        width: min(1760px, calc(100vw - 24px));
+        padding: 12px 0;
+      }
+
+      .dashboard-compact .dashboard-shell {
+        min-height: calc(100dvh - 24px);
+        grid-template-rows: auto auto auto auto minmax(0, 1fr);
+        gap: var(--compact-gap);
+      }
+
+      .dashboard-compact .dashboard-shell::before {
+        inset: -8px -10px;
+      }
+
+      .dashboard-compact .topbar-centered {
+        grid-template-columns: 320px minmax(0, 1fr) 320px;
+        gap: var(--compact-gap);
+        align-items: center;
+        margin-bottom: 0;
+      }
+
+      .dashboard-compact .eyebrow {
+        font-size: 10px;
+      }
+
+      .dashboard-compact h1 {
+        margin-top: 3px;
+        font-size: clamp(24px, 2.45vw, 38px);
+        line-height: 1;
+      }
+
+      .dashboard-compact .subtitle {
+        max-width: 980px;
+        margin-top: 6px;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .dashboard-compact .metric-ribbon {
+        box-shadow: none;
+      }
+
+      .dashboard-compact .ribbon-item {
+        min-height: 48px;
+        padding: 8px 12px;
+      }
+
+      .dashboard-compact .ribbon-value {
+        margin-top: 4px;
+        font-size: 17px;
+      }
+
+      .dashboard-compact .status-strip {
+        min-width: 0;
+        padding: 10px;
+      }
+
+      .dashboard-compact .score-bar {
+        height: 10px;
+        margin-top: 8px;
+      }
+
+      .dashboard-compact .score-legend {
+        margin-top: 6px;
+      }
+
+      .dashboard-compact .kpis {
+        gap: var(--compact-gap);
+        margin-bottom: 0;
+      }
+
+      .dashboard-compact .dashboard-carousel {
+        width: 66.6667%;
+        aspect-ratio: 1.92 / 1;
+      }
+
+      .dashboard-compact .carousel-slide {
+        padding: 8px;
+      }
+
+      .dashboard-compact .kpi-card {
+        min-height: 78px;
+        padding: 12px;
+      }
+
+      .dashboard-compact .kpi-label,
+      .dashboard-compact .kpi-note,
+      .dashboard-compact .panel-kicker,
+      .dashboard-compact .timeline-desc,
+      .dashboard-compact .benchmark-desc,
+      .dashboard-compact .summary-card span {
+        font-size: 11px;
+      }
+
+      .dashboard-compact .kpi-value {
+        margin-top: 8px;
+        font-size: clamp(24px, 2.25vw, 34px);
+      }
+
+      .dashboard-compact .kpi-note {
+        margin-top: 6px;
+        line-height: 1.25;
+      }
+
+      .dashboard-compact .compact-main-grid {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.72fr) minmax(720px, 1.72fr);
+        gap: var(--compact-gap);
+        min-height: 0;
+        align-items: stretch;
+      }
+
+      .dashboard-compact .grid {
+        gap: var(--compact-gap);
+      }
+
+      .dashboard-compact .panel,
+      .dashboard-compact .todo-drawer {
+        padding: var(--compact-panel-padding);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .dashboard-compact .panel-head {
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .dashboard-compact .panel-title {
+        font-size: 15px;
+      }
+
+      .dashboard-compact .pill {
+        min-height: 22px;
+        padding: 3px 8px;
+        font-size: 10px;
+      }
+
+      .dashboard-compact .timeline {
+        gap: 7px;
+      }
+
+      .dashboard-compact .timeline-item {
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .dashboard-compact .timeline-date {
+        font-size: 10px;
+      }
+
+      .dashboard-compact .timeline-title {
+        font-size: 12px;
+      }
+
+      .dashboard-compact .benchmark-panel-compact {
+        min-height: 0;
+      }
+
+      .dashboard-compact .view-summary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .dashboard-compact .summary-card {
+        padding: 8px;
+      }
+
+      .dashboard-compact .summary-card strong {
+        font-size: 12px;
+      }
+
+      .dashboard-compact .section-note {
+        margin: 0 0 8px;
+        padding: 7px 9px;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .dashboard-compact .tab-button {
+        min-height: 30px;
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+
+      .dashboard-compact .benchmark-grid {
+        gap: 9px;
+      }
+
+      .dashboard-compact .benchmark-card {
+        min-height: 228px;
+        padding: 11px;
+      }
+
+      .dashboard-compact .benchmark-card::before {
+        right: 10px;
+        top: 10px;
+        font-size: 9px;
+      }
+
+      .dashboard-compact .donut-wrap {
+        margin-top: 16px;
+      }
+
+      .dashboard-compact .donut {
+        width: 104px;
+        height: 104px;
+      }
+
+      .dashboard-compact .donut-percent {
+        font-size: 25px;
+      }
+
+      .dashboard-compact .donut-label {
+        margin-top: 4px;
+        font-size: 10px;
+      }
+
+      .dashboard-compact .benchmark-name {
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      .dashboard-compact .benchmark-meta {
+        gap: 5px;
+        margin-top: 7px;
+      }
+
+      .dashboard-compact .benchmark-desc {
+        margin-top: 7px;
+        line-height: 1.35;
+      }
+
+      .dashboard-compact .flow {
+        margin-top: 8px;
+      }
+
+      .dashboard-compact .flow span {
+        padding: 4px 7px;
+        font-size: 10px;
+      }
+
+      .dashboard-compact .category-layout {
+        grid-template-columns: minmax(300px, 0.92fr) minmax(300px, 1fr);
+        gap: 10px;
+      }
+
+      .dashboard-compact .bar-chart {
+        min-height: 226px;
+        padding: 10px 8px 8px;
+        background-size: 100% 38px;
+      }
+
+      .dashboard-compact .bar-item {
+        height: 202px;
+        gap: 7px;
+      }
+
+      .dashboard-compact .bar-track {
+        height: 160px;
+        width: min(34px, 100%);
+      }
+
+      .dashboard-compact .progress-list {
+        gap: 7px;
+      }
+
+      .dashboard-compact .progress-row {
+        padding: 8px;
+      }
+
+      .dashboard-compact .progress-track {
+        height: 7px;
+        margin-top: 7px;
+      }
+
+      .dashboard-compact .todo-form {
+        gap: 7px;
+        margin-top: 8px;
+      }
+
+      .dashboard-compact .todo-input,
+      .dashboard-compact .todo-add,
+      .dashboard-compact .todo-clear {
+        min-height: 34px;
+      }
+
+      .dashboard-compact .todo-list {
+        gap: 7px;
+        margin-top: 8px;
+      }
+
+      .dashboard-compact .todo-item {
+        grid-template-columns: 22px minmax(0, 1fr) auto;
+        gap: 7px;
+        padding: 7px;
+      }
+
+      .dashboard-compact .todo-check {
+        width: 18px;
+        height: 18px;
+      }
+
+      .dashboard-compact .todo-delete {
+        min-width: 26px;
+        min-height: 26px;
+      }
+
+      .dashboard-compact .todo-clear {
+        margin-top: 8px;
+      }
+
+    }
+
+    @media (max-width: 760px) {
+      .dashboard {
+        width: min(100% - 20px, 680px);
+        padding-top: 18px;
+      }
+
+      .topbar,
+      .kpis,
+      .benchmark-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-spacer {
+        display: none;
+      }
+
+      .agent-return-link {
+        justify-self: stretch;
+        justify-content: center;
+      }
+
+      .topbar-centered .hero-copy {
+        text-align: left;
+      }
+
+      .status-strip {
+        min-width: 0;
+        justify-self: stretch;
+      }
+
+      .carousel-slide {
+        padding: 6px;
+      }
+
+      .dashboard-carousel {
+        width: 100%;
+      }
+
+      .panel,
+      .todo-drawer,
+      .kpi-card,
+      .benchmark-card {
+        padding: 14px;
+      }
+
+      .floating-todo {
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-chart {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .todo-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #category-panel .category-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #scenario-bars {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (max-width: 900px) {
+      #scenario-bars {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard dashboard-compact">
+    <div class="dashboard-shell">
+    <header class="topbar topbar-centered">
+      <a class="agent-return-link" href="/" aria-label="返回 Agent 对话主界面">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M19 12H5"/>
+          <path d="m12 19-7-7 7-7"/>
+        </svg>
+        <span>返回 Agent</span>
+      </a>
+      <div class="hero-copy">
+        <div class="eyebrow">SecHeur Agent · Security Evaluation</div>
+        <h1>安全场景能力评估看板</h1>
+        <p class="subtitle">覆盖 CTF 解题、渗透测试、应急响应、代码审计四大安全场景的实验成功率与 SOTA Agent 横向对比。</p>
+      </div>
+      <aside class="status-strip" aria-label="评估场景覆盖">
+        <div class="status-title">
+          <span>评估场景</span>
+          <strong>4 个</strong>
+        </div>
+        <div class="score-bar" aria-label="四大场景等权覆盖">
+          <span title="CTF 解题"></span>
+          <span title="渗透测试"></span>
+          <span title="应急响应"></span>
+          <span title="代码审计"></span>
+        </div>
+        <div class="score-legend">
+          <span>CTF 解题</span>
+          <span>渗透测试</span>
+          <span>应急响应</span>
+          <span>代码审计</span>
+        </div>
+      </aside>
+    </header>
+
+    <section class="dashboard-carousel" id="dashboard-carousel" aria-label="自动更新看板摘要">
+      <article class="carousel-slide active" aria-label="CTF Scoreboard">
+        <img src="/benchmark-dashboard/assets/scoreboard.png" alt="CTF Scoreboard 排名和分数趋势图">
+        <p class="carousel-caption">K17 CTF 2026：团队取得第二名</p>
+      </article>
+      <article class="carousel-slide" aria-label="取证报告">
+        <img src="/benchmark-dashboard/assets/forensic-dossier.png" alt="蓝军溯源取证报告页面">
+        <p class="carousel-caption">Agent 攻击溯源：完成溯源分析与总结</p>
+      </article>
+      <article class="carousel-slide" aria-label="CTF 题目榜单">
+        <img src="/benchmark-dashboard/assets/challenge-board.png" alt="CTF 题目榜单和战队完成情况">
+        <p class="carousel-caption">“长城杯”网络安全大赛：仅剩两道题未解</p>
+      </article>
+      <div class="carousel-dots" aria-hidden="true">
+        <button class="carousel-dot active" type="button" tabindex="-1"></button>
+        <button class="carousel-dot" type="button" tabindex="-1"></button>
+        <button class="carousel-dot" type="button" tabindex="-1"></button>
+      </div>
+    </section>
+
+    <section class="metric-ribbon" aria-label="数据口径摘要">
+      <div class="ribbon-item">
+        <div class="ribbon-label">评估场景</div>
+        <div class="ribbon-value good">4 个</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-label">横向对比</div>
+        <div class="ribbon-value">NYU · CAI · pentestGPT</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-label">评测基准</div>
+        <div class="ribbon-value">XBEN · IRbench</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-label">数据口径</div>
+        <div class="ribbon-value good">实验结果</div>
+      </div>
+    </section>
+
+    <section class="kpis" aria-label="顶部总览指标">
+      <article class="kpi-card">
+        <div class="kpi-label">CTF 总体成功率</div>
+        <div class="kpi-value">66.2%</div>
+        <div class="kpi-note">InterCode-CTF / CyBench / NYU 三基准合计 249/376，40 道交集题领先 SOTA。</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">应急响应成功率</div>
+        <div class="kpi-value">93.3%</div>
+        <div class="kpi-note">IRbench 45 道任务成功解决 42 道。</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">XBEN Level3</div>
+        <div class="kpi-value">6/8</div>
+        <div class="kpi-note">高难度题目 8 道成功解决 6 道，成功率 75.0%。</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">NPD 检出率</div>
+        <div class="kpi-value">100%</div>
+        <div class="kpi-note">代码审计三类漏洞中表现最优，UAF 40%、MLK 32%。</div>
+      </article>
+    </section>
+
+    <section class="compact-main-grid" aria-label="单屏展示模式">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">比赛关键时间线</h2>
+              <p class="panel-kicker">第一轮提交与初审，第二轮进入 2026 年 11 月终审擂台赛。</p>
+            </div>
+            <span class="pill">2026.05 - 2026.11</span>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </section>
+
+      <section class="panel benchmark-panel-compact">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">四大场景成功率</h2>
+            <p class="panel-kicker">CTF 解题 · 渗透测试 · 应急响应 · 代码审计，实验成功率与横向对比。</p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="统计维度切换">
+            <button class="tab-button active" type="button" role="tab" aria-selected="true" aria-controls="benchmark-panel" data-tab="benchmark">场景成功率</button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="category-panel" data-tab="category">实验详情</button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="ablation-panel" data-tab="ablation">消融实验</button>
+          </div>
+        </div>
+        <div class="view-summary">
+          <article class="summary-card">
+            <strong>CTF 对比领先 SOTA</strong>
+            <span>40 道共同题成功 23 道，高于 NYU 20 道与 CAI 9 道。</span>
+          </article>
+          <article class="summary-card">
+            <strong>应急响应表现稳定</strong>
+            <span>IRbench 45 题解出 42 题，成功率 93.3%。</span>
+          </article>
+          <article class="summary-card">
+            <strong>审计长短板清晰</strong>
+            <span>NPD 检出率 100%，MLK 32% 列为优先修复项。</span>
+          </article>
+        </div>
+        <p class="section-note">说明：代码审计三类检出最高 100%、最低 32%；渗透测试含 pentestGPT（66.7%）与 XBEN Level3（6/8）两个子场景。</p>
+
+        <section id="benchmark-panel" class="tab-panel active" role="tabpanel">
+          <div class="bar-chart" id="scenario-bars" aria-label="四大场景成功率柱状图"></div>
+          <div class="flow" aria-label="场景覆盖顺序">
+            <span>CTF 解题</span>
+            <span>渗透测试</span>
+            <span>应急响应</span>
+            <span>代码审计</span>
+          </div>
+        </section>
+
+        <section id="category-panel" class="tab-panel" role="tabpanel">
+          <div class="category-layout">
+            <div class="progress-list" id="detail-progress" aria-label="各场景实验明细进度"></div>
+          </div>
+        </section>
+
+        <section id="ablation-panel" class="tab-panel" role="tabpanel">
+          <div class="category-layout">
+            <div class="progress-list" id="ablation-progress" aria-label="消融实验对比进度"></div>
+          </div>
+          <p class="section-note">消融说明：知识库工程以时间换空间，平均耗时 459.71s → 523.29s；典型案例 MissingBits 761s → 190s、WalkingToTheSeaSide 470s → 170s，加入知识库后均成功解题。</p>
+        </section>
+      </section>
+    </section>
+
+    </div>
+  </main>
+
+  <section class="floating-todo" aria-label="备赛待办事项">
+    <div id="todo-drawer" class="todo-drawer" hidden>
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">备赛待办</h2>
+          <p class="panel-kicker">添加待办事项，并勾选表示完成。本机自动保存。</p>
+        </div>
+      </div>
+      <form id="todo-form" class="todo-form">
+        <input id="todo-input" class="todo-input" type="text" maxlength="80" placeholder="例如：确认 Cybench 未完成题目列表" aria-label="新增待办事项">
+        <button class="todo-add" type="submit">添加</button>
+      </form>
+      <ul id="todo-list" class="todo-list"></ul>
+      <button id="todo-clear" class="todo-clear" type="button">清空已完成</button>
+    </div>
+    <button id="todo-toggle" class="todo-fab" type="button" aria-expanded="false" aria-controls="todo-drawer">
+      <span>备赛待办</span>
+      <span class="pill" id="todo-count">0 / 0</span>
+    </button>
+  </section>
+
+  <div id="tooltip" class="tooltip hidden" role="tooltip"></div>
+
+  <script>
+    const scenarioRates = [
+      {
+        scenario: "CTF 解题",
+        percent: 66.2,
+        tooltip: "CTF 总体：249/376（66.2%）<br>InterCode-CTF 96.3% · CyBench 66.7% · NYU 56.6%<br>40 道交集对比：本系统 23 · NYU Agent 20 · CAI Agent 9"
+      },
+      {
+        scenario: "渗透测试",
+        percent: 66.7,
+        tooltip: "pentestGPT 场景成功率 66.7%<br>XBEN Level3：8 题解出 6 道（75.0%）"
+      },
+      {
+        scenario: "应急响应",
+        percent: 93.3,
+        tooltip: "IRbench：45 道任务成功解决 42 道<br>成功率 93.3%"
+      },
+      {
+        scenario: "代码审计",
+        percent: 100,
+        tooltip: "NPD 检出率 100%（三类中最优）<br>UAF 40% · MLK 32%<br>对比基准：最高 100% · 最低 32%"
+      }
+    ];
+
+    const experimentDetails = [
+      { label: "CTF 总体 · 三基准合计", value: "249/376 · 66.2%", percent: 66.2 },
+      { label: "CTF · InterCode-CTF", value: "78/81 · 96.3%", percent: 96.3 },
+      { label: "CTF · CyBench", value: "26/39 · 66.7%", percent: 66.7 },
+      { label: "CTF · NYU", value: "145/256 · 56.6%", percent: 56.6 },
+      { label: "CTF 题型 · Misc", value: "50/63 · 79.4%", percent: 79.4 },
+      { label: "CTF 题型 · Web", value: "27/36 · 75.0%", percent: 75 },
+      { label: "CTF 题型 · Rev", value: "65/93 · 69.9%", percent: 69.9 },
+      { label: "CTF 题型 · Crypto", value: "64/92 · 69.6%", percent: 69.6 },
+      { label: "CTF 题型 · Forensics", value: "24/41 · 58.5%", percent: 58.5 },
+      { label: "CTF 题型 · Pwn", value: "19/51 · 37.3%", percent: 37.3 },
+      { label: "CTF 对比 · 主 Agent（our）", value: "23/40 · 57.5%", percent: 57.5 },
+      { label: "CTF 对比 · NYU Agent", value: "20/40 · 50.0%", percent: 50 },
+      { label: "CTF 对比 · CAI Agent", value: "9/40 · 22.5%", percent: 22.5 },
+      { label: "渗透测试 · PentestGPT", value: "66.7%", percent: 66.7 },
+      { label: "渗透测试 · XBEN Level3", value: "6/8 · 75.0%", percent: 75 },
+      { label: "应急响应 · IRbench", value: "42/45 · 93.3%", percent: 93.3 },
+      { label: "代码审计 · NPD 空指针解引用", value: "100%", percent: 100 },
+      { label: "代码审计 · UAF 释放后使用", value: "40%", percent: 40 },
+      { label: "代码审计 · MLK 内存泄漏", value: "32%", percent: 32 }
+    ];
+
+    const ablationProgress = [
+      { label: "知识库工程 · 总体成功率", value: "62% → 72%", percent: 72, before: 62 },
+      { label: "计划工程 · CTF 解题", value: "59% → 68%", percent: 68, before: 59 },
+      { label: "计划工程 · 代码审计", value: "51% → 58%", percent: 58, before: 51 },
+      { label: "计划工程 · 渗透测试", value: "65% → 74%", percent: 74, before: 65 },
+      { label: "计划工程 · 应急响应", value: "87% → 93%", percent: 93, before: 87 }
+    ];
+
+    const competitionTimeline = [
+      {
+        date: "2026 年 5 月至 9 月上旬",
+        title: "参赛准备阶段",
+        description: "各高校组织学生参赛，安排专业人员给予指导，为参赛团队提供支持保障。"
+      },
+      {
+        date: "2026 年 9 月 5 日前",
+        title: "作品提交截止",
+        description: "各参赛团队完成作品提交，并严格遵照发榜单位明确的提交规范执行。"
+      },
+      {
+        date: "2026 年 9 月 20 日前",
+        title: "初审完成",
+        description: "由发榜单位完成初审，确定入围终审擂台赛的晋级作品和团队。"
+      },
+      {
+        date: "2026 年 10 月",
+        title: "作品完善阶段",
+        description: "发榜单位安排专门团队提供帮助和指导，各晋级团队完善作品。"
+      },
+      {
+        date: "2026 年 11 月",
+        title: "终审擂台赛",
+        description: "组织终审擂台赛，完成现场综合评测与作品展示，角逐“擂主”。"
+      }
+    ];
+
+    const defaultTodos = [
+      { text: "确认服务器 Benchmark 题目列表路径", done: false },
+      { text: "补齐 Cybench 未完成题目优先级", done: false },
+      { text: "准备模型 API 报备与安全网关接入说明", done: true }
+    ];
+
+    const todoStorageKey = "benchmarkDashboardTodos";
+    const tooltip = document.getElementById("tooltip");
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function showTooltip(event, html) {
+      tooltip.innerHTML = html;
+      tooltip.classList.remove("hidden");
+      moveTooltip(event);
+    }
+
+    function moveTooltip(event) {
+      tooltip.style.left = `${event.clientX}px`;
+      tooltip.style.top = `${event.clientY}px`;
+    }
+
+    function hideTooltip() {
+      tooltip.classList.add("hidden");
+    }
+
+    function attachTooltip(el, html) {
+      el.addEventListener("mouseenter", (event) => showTooltip(event, html));
+      el.addEventListener("mousemove", moveTooltip);
+      el.addEventListener("mouseleave", hideTooltip);
+      el.addEventListener("focus", (event) => showTooltip(event, html));
+      el.addEventListener("blur", hideTooltip);
+    }
+
+    function renderTimeline() {
+      const container = document.getElementById("timeline");
+      container.innerHTML = competitionTimeline.map(item => `
+        <article class="timeline-item">
+          <div class="timeline-date">${escapeHtml(item.date)}</div>
+          <div>
+            <div class="timeline-title">${escapeHtml(item.title)}</div>
+            <p class="timeline-desc">${escapeHtml(item.description)}</p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderScenarioBars() {
+      const bars = document.getElementById("scenario-bars");
+      bars.innerHTML = scenarioRates.map(item => `
+        <div class="bar-item" tabindex="0" data-tooltip="${escapeHtml(item.tooltip)}">
+          <div class="bar-value">${item.percent}%</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="height:${item.percent}%"></div>
+          </div>
+          <div class="bar-label">${escapeHtml(item.scenario)}</div>
+        </div>
+      `).join("");
+      bars.querySelectorAll(".bar-item").forEach((bar) => {
+        attachTooltip(bar, bar.dataset.tooltip);
+      });
+    }
+
+    function renderDetails() {
+      const list = document.getElementById("detail-progress");
+      list.innerHTML = experimentDetails.map(item => `
+        <article class="progress-row" tabindex="0" data-tooltip="${escapeHtml(`${item.label}<br>${item.value}`)}">
+          <div class="progress-head">
+            <span>${escapeHtml(item.label)}</span>
+            <span>${escapeHtml(item.value)}</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${item.percent}%"></div>
+          </div>
+        </article>
+      `).join("");
+      list.querySelectorAll(".progress-row").forEach((row) => {
+        attachTooltip(row, row.dataset.tooltip);
+      });
+    }
+
+    function renderAblation() {
+      const list = document.getElementById("ablation-progress");
+      list.innerHTML = ablationProgress.map(item => `
+        <article class="progress-row" tabindex="0" data-tooltip="${escapeHtml(`${item.label}<br>启用前 ${item.before}% → 启用后 ${item.percent}%`)}">
+          <div class="progress-head">
+            <span>${escapeHtml(item.label)}</span>
+            <span>${escapeHtml(item.value)}</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${item.percent}%"></div>
+            <span class="progress-before" style="left:${item.before}%" aria-hidden="true"></span>
+          </div>
+        </article>
+      `).join("");
+      list.querySelectorAll(".progress-row").forEach((row) => {
+        attachTooltip(row, row.dataset.tooltip);
+      });
+    }
+
+    function setupTabs() {
+      const buttons = document.querySelectorAll(".tab-button");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((btn) => {
+            btn.classList.toggle("active", btn === button);
+            btn.setAttribute("aria-selected", btn === button ? "true" : "false");
+          });
+          document.querySelectorAll(".tab-panel").forEach((panel) => {
+            panel.classList.toggle("active", panel.id === `${button.dataset.tab}-panel`);
+          });
+        });
+      });
+    }
+
+    function setupCarousel() {
+      const carousel = document.getElementById("dashboard-carousel");
+      const slides = Array.from(carousel.querySelectorAll(".carousel-slide"));
+      const dots = Array.from(carousel.querySelectorAll(".carousel-dot"));
+      let current = 0;
+      let timer;
+
+      function showSlide(index) {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, slideIndex) => {
+          slide.classList.toggle("active", slideIndex === current);
+        });
+        dots.forEach((dot, dotIndex) => {
+          dot.classList.toggle("active", dotIndex === current);
+        });
+      }
+
+      function start() {
+        window.clearInterval(timer);
+        timer = window.setInterval(() => showSlide(current + 1), 5000);
+      }
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          showSlide(index);
+          start();
+        });
+      });
+      carousel.addEventListener("mouseenter", () => window.clearInterval(timer));
+      carousel.addEventListener("mouseleave", start);
+      start();
+    }
+
+    function loadTodos() {
+      try {
+        const raw = localStorage.getItem(todoStorageKey);
+        if (!raw) return defaultTodos;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : defaultTodos;
+      } catch (_) {
+        return defaultTodos;
+      }
+    }
+
+    function saveTodos(todos) {
+      localStorage.setItem(todoStorageKey, JSON.stringify(todos));
+    }
+
+    let todos = loadTodos();
+
+    function renderTodos() {
+      const list = document.getElementById("todo-list");
+      const doneCount = todos.filter(todo => todo.done).length;
+      document.getElementById("todo-count").textContent = `${doneCount} / ${todos.length}`;
+      list.innerHTML = todos.map((todo, index) => `
+        <li class="todo-item ${todo.done ? "done" : ""}">
+          <input class="todo-check" type="checkbox" ${todo.done ? "checked" : ""} aria-label="标记完成：${escapeHtml(todo.text)}" data-index="${index}">
+          <span class="todo-text">${escapeHtml(todo.text)}</span>
+          <button class="todo-delete" type="button" aria-label="删除待办：${escapeHtml(todo.text)}" data-index="${index}">×</button>
+        </li>
+      `).join("");
+      list.querySelectorAll(".todo-check").forEach((checkbox) => {
+        checkbox.addEventListener("change", () => toggleTodo(Number(checkbox.dataset.index)));
+      });
+      list.querySelectorAll(".todo-delete").forEach((button) => {
+        button.addEventListener("click", () => deleteTodo(Number(button.dataset.index)));
+      });
+    }
+
+    function addTodo(text) {
+      const clean = text.trim();
+      if (!clean) return;
+      todos = [{ text: clean, done: false }, ...todos];
+      saveTodos(todos);
+      renderTodos();
+    }
+
+    function toggleTodo(index) {
+      todos = todos.map((todo, i) => i === index ? { ...todo, done: !todo.done } : todo);
+      saveTodos(todos);
+      renderTodos();
+    }
+
+    function deleteTodo(index) {
+      todos = todos.filter((_, i) => i !== index);
+      saveTodos(todos);
+      renderTodos();
+    }
+
+    function clearCompletedTodos() {
+      todos = todos.filter(todo => !todo.done);
+      saveTodos(todos);
+      renderTodos();
+    }
+
+    function toggleTodoDrawer(forceOpen) {
+      const drawer = document.getElementById("todo-drawer");
+      const button = document.getElementById("todo-toggle");
+      const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : drawer.hasAttribute("hidden");
+      drawer.toggleAttribute("hidden", !shouldOpen);
+      button.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+      if (shouldOpen) {
+        document.getElementById("todo-input").focus();
+      }
+    }
+
+    function setupTodos() {
+      const form = document.getElementById("todo-form");
+      const input = document.getElementById("todo-input");
+      document.getElementById("todo-toggle").addEventListener("click", () => toggleTodoDrawer());
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        addTodo(input.value);
+        input.value = "";
+        input.focus();
+      });
+      document.getElementById("todo-clear").addEventListener("click", clearCompletedTodos);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          toggleTodoDrawer(false);
+        }
+      });
+      renderTodos();
+    }
+
+    renderTimeline();
+    renderScenarioBars();
+    renderDetails();
+    renderAblation();
+    setupTabs();
+    setupCarousel();
+    setupTodos();
+  </script>
+</body>
+</html>

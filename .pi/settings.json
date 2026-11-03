@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "./extensions/penetration-testing",
+    "../legacy/frontends/desktop/plugins/conversation-trace-ui"
+  ],
+  "extensions": [
+    "-extensions/penetration-testing/index.ts"
+  ]
+}

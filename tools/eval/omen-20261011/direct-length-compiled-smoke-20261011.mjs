@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fauxAssistantMessage, fauxProvider, fauxToolCall, InMemoryCredentialStore } from '/home/seu/direct-length-fix-20261011/packages/ai/dist/index.js';
+import { ModelRuntime } from '/home/seu/direct-length-fix-20261011/packages/coding-agent/dist/index.js';
+import { createSecHeurRuntime } from '/home/seu/direct-length-fix-20261011/packages/secheur-agent/dist/runtime.js';
+import { writeDesktopConfig } from '/home/seu/direct-length-fix-20261011/packages/secheur-agent/dist/desktop-config.js';
+const root = mkdtempSync(join(tmpdir(), 'direct-length-smoke-'));
+writeDesktopConfig(root, { judge: { enabled: false }, planning: { mode: 'off' } });
+writeFileSync(join(root, 'fixture.txt'), 'synthetic harness evidence');
+const faux = fauxProvider({ models: [{ id: 'length-fixture', reasoning: true }] });
+const credentials = new InMemoryCredentialStore();
+await credentials.modify(faux.provider.id, async () => ({ type: 'api_key', key: 'faux-only' }));
+const modelRuntime = await ModelRuntime.create({ credentials, modelsPath: null, refreshOnCreate: false });
+modelRuntime.registerNativeProvider(faux.provider); await modelRuntime.refresh({ allowNetwork: false });
+const continuation = { taskKind: 'ctf', verificationState: 'not_attempted', consecutiveNoToolTurns: 0 };
+const runtime = await createSecHeurRuntime({ projectRoot: root, cwd: root, persist: false, modelRuntime, model: faux.getModel(), executionMode: 'direct', ctfContinuation: continuation, trustedTaskIdentity: { challengeId: 'fixture/length', runId: 'compiled-length' }, legacyRoot: '/home/seu/direct-length-fix-20261011/legacy', env: { PATH: process.env.PATH, PI_OFFLINE: '1', SECHEUR_PYTHON: '/opt/secheur-agent-python/bin/python' } });
+try {
+ runtime.setMemoryReferenceEnabled(false); runtime.setPermissionMode('bypassPermissions'); runtime.config.maxTurns = 8;
+ runtime.session.settingsManager.applyOverrides({ compaction: { keepRecentTokens: 1 } });
+ const events = [];
+ runtime.subscribe(e => { if (['compaction_end', 'tool_execution_start'].includes(e.type)) events.push(e.type); });
+ const read = () => fauxAssistantMessage(fauxToolCall('read', { path: join(root, 'fixture.txt') }));
+ faux.setResponses([read(), fauxAssistantMessage('synthetic truncated', { stopReason: 'length' }), fauxAssistantMessage('synthetic checkpoint summary'), read(), () => { continuation.verificationState = 'accepted'; return fauxAssistantMessage('trusted fixture accepted'); }]);
+ await runtime.prompt('Exercise outer harness only.');
+ assert(events.includes('compaction_end'));
+ assert(events.indexOf('compaction_end') < events.lastIndexOf('tool_execution_start'));
+ assert.equal(continuation.verificationState, 'accepted');
+ assert.equal(runtime.getBudgetStatus().stopped, false);
+ assert(runtime.getBudgetStatus().turnsUsed < 8);
+ console.log(JSON.stringify({ status: 'passed', compiledRuntime: true, nativeCompactionBeforeResumedTool: true, modelCalls: faux.state.callCount, turnsUsed: runtime.getBudgetStatus().turnsUsed }));
+} finally { runtime.dispose(); rmSync(root, { recursive: true, force: true }); }

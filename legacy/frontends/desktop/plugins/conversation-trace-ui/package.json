@@ -1,0 +1,22 @@
+{
+  "name": "@secheur/conversation-trace-ui",
+  "version": "1.2.0",
+  "description": "DeepSeek Harness-style conversation flow UI for SecHeur Agent",
+  "type": "module",
+  "private": true,
+  "pi": {
+    "extensions": [
+      "./index.js"
+    ]
+  },
+  "secheur": {
+    "desktop": {
+      "styles": [
+        "./desktop/conversation-trace.css"
+      ],
+      "scripts": [
+        "./desktop/conversation-trace.js"
+      ]
+    }
+  }
+}

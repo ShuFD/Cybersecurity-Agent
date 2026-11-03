@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-10T23:07:03.520213+00:00",
+  "candidate": "/home/shared/agent-rebuild/app-releases/agent-direct-length-recovery-candidate-20261011",
+  "baseline": "/home/shared/agent-rebuild/app-releases/agent-direct-continue-candidate-20261010",
+  "cause": "No-tool follow-up chaining starved native Pi agent_end compaction; truncated replies consumed the parent turn budget before compaction.",
+  "validation": {
+    "tests_passed": 57,
+    "tests_failed": 0,
+    "build": "passed",
+    "lint": "passed",
+    "oldRegressionReproduced": true,
+    "compiledSmoke": {
+      "status": "passed",
+      "compiledRuntime": true,
+      "nativeCompactionBeforeResumedTool": true,
+      "modelCalls": 5,
+      "turnsUsed": 4
+    },
+    "piCoreUnchanged": true
+  },
+  "changed_files": [
+    {
+      "path": "packages/secheur-agent/src/runtime.ts",
+      "sha256": "2724c94d6abe834cf39ca25bc1967359adb3efdcf97da3ca90f238f3f1cf03e0"
+    },
+    {
+      "path": "packages/secheur-agent/src/extension.ts",
+      "sha256": "c4d8553d4d6740d5e4807046a6d427b601495ca7697f80d5d12e968f67e2e551"
+    },
+    {
+      "path": "packages/secheur-agent/test/continuation-policy.test.ts",
+      "sha256": "c70d5e340e553e0ffd47f9265d2d8437c1de54499a85fd7328267a1e1e01bc7c"
+    }
+  ],
+  "productionDeployed": false
+}

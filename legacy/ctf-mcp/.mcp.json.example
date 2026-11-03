@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "ctf-toolbox": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "--platform", "linux/amd64",
+        "--cap-add=SYS_PTRACE",
+        "--security-opt", "seccomp=unconfined",
+        "-v", "/ABSOLUTE/PATH/TO/YOUR/WORKDIR:/work",
+        "ctf-mcp:ubuntu24-core",
+        "python3", "/opt/ctf-mcp/server.py"
+      ],
+      "timeout": 120
+    }
+  }
+}

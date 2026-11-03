@@ -1,0 +1,89 @@
+Artex 第四种 PLAN：实现与边界
+2026-10-23
+
+候选目录：D:/cy-linux/plan-artex-candidate-20261023
+基底：668fcdb59635b5ac69d66b88e87df11775920e48，叠加 plan-final-round-fix-20261023 已有候选改动。
+本说明记录 2026-10-23 最初实现时的候选范围；后续发布修正见 planning-fixes-20261024.md。
+代码发布与生产激活、真实批测结果分别记录，不据本说明推断生产部署状态。
+
+一、参考版本
+
+参考公开仓库 BaaRai/ARTEX，固定提交 a9c7a75a73e4aadbe0e75465eeafcd742db4930e。
+参考日期为 2026-10-23；该公开分支不等于对未公开上游版本的声明。
+核对文件：db/constants.go、db/exploration.go、db/assets.go、db/digest.go、
+agent/planner.go、agent/worker.go、agent/coldgraph.go、server/engine.go、server/scheduler.go。
+来源许可证为 AGPL-3.0。这里按图语义和调度设计重新实现 TypeScript 应用层；
+没有复制 Go 实现、领域攻击提示词、工具集或上游前端，也不引入第二个模型循环。
+Pi 仍是唯一模型调用、会话和压缩运行时。
+
+二、图迁移
+
+节点：goal、intent、fact、finding、hint、digest。
+现代根节点是 state=origin 的 fact，不另造 begin 节点。
+边：spawns、derived_from、yields、proves、covers，统一由上游指向下游。
+节点带来源、任务/租约归属、证据引用、资产锚点、状态、优先级和创建轮次。
+意图的父节点表示推导来源；dependsOn 才表示必须等待完成的执行依赖。
+
+规划器独占意图创建权。执行器通过 artex_publish_observation 发布事实与发现；
+已有证据卡、checkpoint 和任务交付也投影为图节点，保留 keyValues、scope、
+limitations 和原始 evidenceRefs。证据正文继续存于原有 evidence repository。
+原生校验器的持久化成功记录才能形成 proves 边，模型 finding 本身不能结束任务。
+
+图保存在现有 planning.sqlite 的 planning_artex_graphs 表，按 runId 隔离。
+计划、意图绑定和任务插入共用事务。并发执行器追加观察时读取当前图，避免覆盖；
+规划期间新到的事实可与已有计划合并，并再唤醒规划器。相同观察重试幂等，
+同一 key 的不同内容拒绝覆盖。SQLite 任务租约仍负责原子占用和独占所有权。
+运行状态和最终证明从任务、租约、校验记录投影，不维护两份可相互冲突的执行状态。
+
+资产图有稳定 ID、类型、标签、证据来源与关系；节点 anchors 连接资产图。
+适配为单 run 内共享，未移植上游跨公司/跨任务资产库、认证信息字段及管理界面。
+一个本地 run 对应一个最终 goal；未开放任意增加/删除业务目标、删除历史节点或
+由规划器直接取消执行器的管理接口。
+
+三、调度和接续
+
+复用既有任务池，优先级降序、相同优先级按任务插入顺序领取。
+事件触发规划，800ms 合并窗口；600 秒心跳兜底，均来自固定上游版本。
+执行器占满时仍可处理新的图事件，规划器可选择等待当前具体 owner。
+等待不会结束整个 run；没有活跃 owner 且目标未验证时必须产生可运行工作。
+新的 Pi 规划会话读取图和持久化 TODO；执行器保留自己的 Pi 会话。
+每轮执行器上下文包含当前意图的祖先、相关发现和共享更新，并可按 ID 读原图。
+既有跨执行器校验历史、checkpoint、证据读取和整体预算继续生效。
+Artex 专属事件策略不改变 Progressive、Cairn、Hypothesis 的默认调度策略。
+
+四、冷图
+
+沿用上游 R=6 个规划轮次、K=2 个最小折叠块。
+只有 settled intent 和非 origin fact 可折叠；活跃意图及祖先、直接产物保持热。
+goal、finding、hint、origin 和 digest 不折叠。
+digest/covers 是视图，原节点、原边与原证据引用保留。新任务再次引用旧节点时，
+上下文视图重新显示它和祖先。遍历使用显式队列及 visited 集合。
+原节点通过 artex_read_graph(id) 或 planning_query_context(nodes,id) 读取。
+规划概览复用 planning.maxEvidenceBytes 作为字节预算，不删除持久化内容；
+超预算裁剪有有限退出条件。精确信息可按需分页读取。
+
+五、接线和使用
+
+配置 planning.engine="artex"，executionMode 沿用 plan_single / plan_multi。
+Bridge /planning/options 接受 artex；创建新会话可传
+{"planningEngine":"artex","executionMode":"plan_multi"}。
+已有会话保持原引擎与对话记录。
+
+React 前端和桌面旧前端均增加 Artex · 探索图 选项及图查看入口。
+GET /session/<sessionId>/planning/graph 返回当前会话的投影图；
+加 ?node=<id> 可读取被折叠的原节点。无法读取其他 run 的节点。
+React 显示关系图与节点详情；桌面旧前端提供结构视图和原节点展开。
+
+六、实现文件
+
+planning/artex-types.ts：图数据契约。
+planning/artex-graph.ts：图更新、证据投影、状态投影、资产锚点和冷图视图。
+planning/artex-adapters.ts：Pi 规划会话、图查询/写回工具、执行器上下文。
+planning/artex-wake.ts：合并事件及心跳。
+planning/store.ts / harness.ts / session-controller.ts：复用存储、租约与生命周期。
+
+七、验证口径
+
+测试使用合成数据、离线 faux provider 和本地临时 HTTP 服务。
+检查的是图与运行时契约，不是实际题目成功率。
+详见同目录 artex-validation-20261023.txt。

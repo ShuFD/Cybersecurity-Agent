@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">SecHeur Agent execution loop</title>
+  <desc id="desc">Plan, act, verify, and trace form a reversible execution loop.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#173466"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-15%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#173466" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="300" rx="20" fill="#f7f9fc"/>
+  <text x="600" y="34" text-anchor="middle" fill="#102a56" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="700">Execution loop / 执行闭环</text>
+
+  <g filter="url(#shadow)" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <g transform="translate(40 70)">
+      <rect width="240" height="125" rx="14" fill="#fff" stroke="#1297a5" stroke-width="2"/>
+      <circle cx="30" cy="30" r="17" fill="#1297a5"/>
+      <text x="30" y="36" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">1</text>
+      <text x="60" y="37" fill="#102a56" font-size="21" font-weight="700">PLAN</text>
+      <text x="60" y="70" fill="#41526f" font-size="16">规划目标与边界</text>
+      <path d="M60 91 H198" stroke="#d9e2ee" stroke-width="2"/>
+      <text x="60" y="113" fill="#1297a5" font-size="14">scope · budget</text>
+    </g>
+
+    <g transform="translate(330 70)">
+      <rect width="240" height="125" rx="14" fill="#fff" stroke="#3568d4" stroke-width="2"/>
+      <circle cx="30" cy="30" r="17" fill="#3568d4"/>
+      <text x="30" y="36" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">2</text>
+      <text x="60" y="37" fill="#102a56" font-size="21" font-weight="700">ACT</text>
+      <text x="60" y="70" fill="#41526f" font-size="16">调用插件与工具</text>
+      <path d="M60 91 H198" stroke="#d9e2ee" stroke-width="2"/>
+      <text x="60" y="113" fill="#3568d4" font-size="14">typed · reversible</text>
+    </g>
+
+    <g transform="translate(620 70)">
+      <rect width="240" height="125" rx="14" fill="#fff" stroke="#f28a2b" stroke-width="2"/>
+      <circle cx="30" cy="30" r="17" fill="#f28a2b"/>
+      <text x="30" y="36" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">3</text>
+      <text x="60" y="37" fill="#102a56" font-size="21" font-weight="700">VERIFY</text>
+      <text x="60" y="70" fill="#41526f" font-size="16">复核结果与权限</text>
+      <path d="M60 91 H198" stroke="#d9e2ee" stroke-width="2"/>
+      <text x="60" y="113" fill="#f28a2b" font-size="14">evidence · policy</text>
+    </g>
+
+    <g transform="translate(910 70)">
+      <rect width="240" height="125" rx="14" fill="#fff" stroke="#5861b8" stroke-width="2"/>
+      <circle cx="30" cy="30" r="17" fill="#5861b8"/>
+      <text x="30" y="36" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">4</text>
+      <text x="60" y="37" fill="#102a56" font-size="21" font-weight="700">TRACE</text>
+      <text x="60" y="70" fill="#41526f" font-size="16">记录轨迹并可回放</text>
+      <path d="M60 91 H198" stroke="#d9e2ee" stroke-width="2"/>
+      <text x="60" y="113" fill="#5861b8" font-size="14">JSONL · SQLite</text>
+    </g>
+  </g>
+
+  <path d="M280 132 H320" stroke="#173466" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M570 132 H610" stroke="#173466" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M860 132 H900" stroke="#173466" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M1030 215 C1030 250 170 250 170 215" fill="none" stroke="#173466" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="600" y="282" text-anchor="middle" fill="#41526f" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15">每次行动都有依据、边界与恢复路径 / Every action stays explainable and recoverable</text>
+</svg>

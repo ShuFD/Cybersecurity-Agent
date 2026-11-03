@@ -1,0 +1,41 @@
+# AI install hint: choose deps by OS/env + needed ui/bot. do NOT install all.
+# minimal core first; missing packages can be installed on demand.
+
+[project]
+name = "secheur-agent"
+version = "0.1.0"
+description = "Minimalist self-evolving autonomous agent framework"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = { text = "MIT" }
+dependencies = [
+    "requests>=2.28",
+    "beautifulsoup4>=4.12",
+    "bottle>=0.12",
+    "simple-websocket-server>=0.4",
+    "aiohttp>=3.9",
+]
+
+[project.optional-dependencies]
+# select extras, not all. match current task/env.
+# .[ui] is the HTML desktop shell.
+ui = [
+    "pywebview>=4.0",
+]
+dev = [
+    "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
+packages = ["secheur_cli"]
+
+[project.scripts]
+secheur = "secheur_cli.cli:main"

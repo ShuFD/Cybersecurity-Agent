@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" content="#f4f5f7" />
+		<title>SecHeur Agent</title>
+		<script>
+			(() => {
+				const saved = localStorage.getItem("app-shell-theme");
+				const theme = saved === "dark" || saved === "light" ? saved :
+					(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+				document.documentElement.dataset.theme = theme;
+			})();
+		</script>
+		<script type="module" crossorigin src="/webui/assets/app.js"></script>
+		<link rel="stylesheet" crossorigin href="/webui/assets/index.css">
+	</head>
+	<body>
+		<div id="root"></div>
+	</body>
+</html>

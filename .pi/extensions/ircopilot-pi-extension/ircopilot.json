@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "loopProtection": {
+    "softMutationLimit": 48,
+    "hardMutationLimit": 0,
+    "repeatedErrorLimit": 8
+  }
+}

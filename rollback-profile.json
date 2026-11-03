@@ -1,0 +1,12 @@
+{
+  "executionMode": "plan_multi",
+  "executionCapacity": 2,
+  "planning": {
+    "mode": "active",
+    "observerMode": "off",
+    "taskGranularityPromptEnabled": false,
+    "evidenceCatalogEnabled": false
+  },
+  "maxTurns": 220,
+  "memoryReferenceEnabled": false
+}

@@ -1,0 +1,40 @@
+{
+  "formatVersion": 1,
+  "created": "2026-10-19",
+  "sourceBaseCommit": "15b5d63ccc542957403f18cf7b52bc1863e8a3ca",
+  "files": [
+    {
+      "file": "desktop-main-cli.js",
+      "sha256": "ef9d7b1ad219ebd2ea4506fb1ce208d573cf4f0f884b00c8219252f52904ade2"
+    },
+    {
+      "file": "desktop-main-platform.js",
+      "sha256": "7f1eaf7c3958810d051cf1a7a79a1d6309eddfcd8823d840c3a1bf9d044d47ed"
+    },
+    {
+      "file": "desktop-main-solvers.js",
+      "sha256": "66791fc5128632ef3f8a013ef33c2638e335615285e0edd85d691e9f47eacb47"
+    },
+    {
+      "file": "bridge.js",
+      "sha256": "9652a0ac3d2091e119d921fc69e00b2b9fb188a1303ee48a54c5aee2a68dd09a"
+    },
+    {
+      "file": "competition-protocol-service.js",
+      "sha256": "1d71b66a4742151244de69627728231a6948c6a8ab5f744903db572ec9f1eae4"
+    },
+    {
+      "file": "main-agent.js",
+      "sha256": "93079e8c8a27a9f0dd0e0cac8e73e28b9b62df256daba903b0e6d014c74fdf03"
+    },
+    {
+      "file": "runtime.js",
+      "sha256": "cdb230704e82fb8c085bbe3b18bff9f863e41b94931977e2d8e71c33c8c51f07"
+    },
+    {
+      "file": "worklist.js",
+      "sha256": "48587cc87fc69d2096aaafa2973cdaed4d8846a0f819294415b21caf01aa71bf"
+    }
+  ],
+  "updated": "2026-10-20"
+}

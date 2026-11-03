@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.tgz
+!src/adapter/result-parser.ts
+!src/extension/result-mapper.ts
+!tests/result-mapper.test.ts
+!tests/result-parser.test.ts

@@ -1,0 +1,30 @@
+{
+	"name": "@secheur/webui",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"description": "React web client for the SecHeur Agent bridge",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build && tsgo -p tsconfig.json",
+		"typecheck": "tsgo -p tsconfig.json",
+		"preview": "vite preview",
+		"test": "vitest --run"
+	},
+	"dependencies": {
+		"@tanstack/react-virtual": "3.14.10",
+		"dompurify": "3.4.14",
+		"lucide-react": "1.34.0",
+		"marked": "18.0.5",
+		"react": "19.2.8",
+		"react-dom": "19.2.8"
+	},
+	"devDependencies": {
+		"@types/react": "19.2.18",
+		"@types/react-dom": "19.2.5",
+		"@vitejs/plugin-react": "6.1.0",
+		"typescript": "5.9.3",
+		"vite": "8.0.16",
+		"vitest": "4.1.9"
+	}
+}

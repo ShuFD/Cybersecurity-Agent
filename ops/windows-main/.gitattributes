@@ -1,0 +1,2 @@
+# Keep deployed byte hashes reproducible across Windows and Linux checkouts.
+runtime/*.js -text

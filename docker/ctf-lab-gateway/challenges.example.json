@@ -1,0 +1,12 @@
+{
+  "10756": {
+    "image": "secheur-10756:local",
+    "command": ["/challenge/run"],
+    "containerPort": 31337,
+    "environment": {
+      "CTF_CHALLENGE_ID": "10756"
+    },
+    "memoryBytes": 536870912,
+    "pidsLimit": 128
+  }
+}

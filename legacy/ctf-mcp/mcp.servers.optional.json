@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "ctf-toolbox": {
+      "command": "python3",
+      "args": ["/opt/ctf-mcp/server.py"],
+      "env": {
+        "CTF_WORKDIR": "/work",
+        "WINEPREFIX": "/home/ctf/.wine",
+        "WINEARCH": "win64",
+        "WINEDEBUG": "-all"
+      }
+    }
+  }
+}

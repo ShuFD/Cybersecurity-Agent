@@ -1,0 +1,148 @@
+{
+  "scope": "Outer harness metadata only; no challenge text, attack content or tool bodies",
+  "cases": [
+    {
+      "name": "stale_owner_gap",
+      "databaseSha256": "67ce340901e4f18c5c9d968b0a1ef2104f8d68fe7d953a5d395f6401b2904036",
+      "events": [
+        {
+          "eventId": "b16af8f7-914b-4505-9d43-fef139be6d16",
+          "type": "task_committed",
+          "seconds": 898.387,
+          "taskId": "plan_60ee0b9b81ee12e4d3b0fd1d",
+          "leaseId": "ffe4b961-142e-4ef8-80e5-d6629341eb22",
+          "outcome": "blocked"
+        },
+        {
+          "eventId": "64c20766-3ea9-49bc-a1e3-5a93cb4f9358",
+          "type": "supervisor_propose_start",
+          "seconds": 898.405
+        },
+        {
+          "eventId": "5bd010aa-ba49-4137-ad89-5c15f734f9c0",
+          "type": "task_committed",
+          "seconds": 944.616,
+          "taskId": "plan_0c8c6721790ebc52d2d3fd48",
+          "leaseId": "712e3416-dd7e-472e-a9fc-bc6e2a4637ff",
+          "outcome": "blocked"
+        },
+        {
+          "eventId": "5b32d261-fb1e-4e61-b3bf-01acf706a837",
+          "type": "supervisor_propose_end",
+          "seconds": 1080.782,
+          "decision": "blocked",
+          "taskCount": 0
+        },
+        {
+          "eventId": "c547863d-3410-4e04-93bc-f4fc1680067a",
+          "type": "supervisor_propose_start",
+          "seconds": 1080.792
+        },
+        {
+          "eventId": "3297695c-2fa5-4f3a-ab77-f975085b070c",
+          "type": "supervisor_propose_end",
+          "seconds": 1338.854,
+          "decision": "create_tasks",
+          "taskCount": 2
+        },
+        {
+          "eventId": "c992f930-965d-46cc-9f84-b47b33837573",
+          "type": "task_leased",
+          "seconds": 1338.898,
+          "taskId": "plan_86a8ff5ce46e22e11c9ca603",
+          "leaseId": "7d879996-fbbc-4f8f-8e10-dc81dc671844"
+        },
+        {
+          "eventId": "57ba423c-4cc3-430b-b31a-6b257603fb45",
+          "type": "task_leased",
+          "seconds": 1338.939,
+          "taskId": "plan_77cfa21b537bfa5ac1e5ab7a",
+          "leaseId": "33c2690d-5805-476e-93ed-41b935be0ab5"
+        }
+      ],
+      "gapSeconds": 394.357,
+      "queryTools": {
+        "planning_read_evidence": 33,
+        "planning_query_context": 5,
+        "submit_planning_proposal": 1
+      },
+      "lastOwnerEndedSeconds": 944.609,
+      "blockedPlanEndSeconds": 1080.782
+    },
+    {
+      "name": "completion_dependency_wait",
+      "databaseSha256": "782b09d0568386f727b28d270f74a2b34ce4f72c831cff6d98e061fcca398762",
+      "tasks": [
+        {
+          "taskId": "plan_5449f5254ce826d34ca47a67",
+          "status": "done",
+          "createdAt": 1791919098219,
+          "updatedAt": 1791919339964,
+          "outerTurnLimit": false
+        },
+        {
+          "taskId": "plan_a0a495aa4ade4d3167a8e7c9",
+          "status": "done",
+          "createdAt": 1791919098219,
+          "updatedAt": 1791919665250,
+          "outerTurnLimit": false
+        },
+        {
+          "taskId": "plan_e3ac8677b672eecfe7a8d05f",
+          "status": "done",
+          "createdAt": 1791919828178,
+          "updatedAt": 1791920001054,
+          "outerTurnLimit": false
+        },
+        {
+          "taskId": "plan_57fc8dcca2264d9b4b22b298",
+          "status": "ready",
+          "createdAt": 1791919869560,
+          "updatedAt": 1791921490742,
+          "outerTurnLimit": true
+        },
+        {
+          "taskId": "plan_bb17405404bd173734f01364",
+          "status": "proposed",
+          "createdAt": 1791920054778,
+          "updatedAt": 1791920054778,
+          "outerTurnLimit": false
+        },
+        {
+          "taskId": "plan_0f8904f7999a6b77630dc6be",
+          "status": "done",
+          "createdAt": 1791920647219,
+          "updatedAt": 1791920740381,
+          "outerTurnLimit": false
+        },
+        {
+          "taskId": "plan_87b181ddd7d9ed21fd25481a",
+          "status": "ready",
+          "createdAt": 1791921458688,
+          "updatedAt": 1791921490742,
+          "outerTurnLimit": true
+        }
+      ],
+      "dependencies": [
+        {
+          "taskId": "plan_bb17405404bd173734f01364",
+          "sourceTaskId": "plan_57fc8dcca2264d9b4b22b298"
+        },
+        {
+          "taskId": "plan_0f8904f7999a6b77630dc6be",
+          "sourceTaskId": "plan_5449f5254ce826d34ca47a67"
+        },
+        {
+          "taskId": "plan_0f8904f7999a6b77630dc6be",
+          "sourceTaskId": "plan_a0a495aa4ade4d3167a8e7c9"
+        }
+      ]
+    },
+    {
+      "name": "shared_provider_failure",
+      "sourceSha256": "05a14af9772a885c2611fdaaa4011d6e122164623d822d1b042c191009452ac7",
+      "requestCount": 342,
+      "http429Count": 264
+    }
+  ]
+}

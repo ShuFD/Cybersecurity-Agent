@@ -1,0 +1,28 @@
+{
+  "pollSnapshot": {
+    "taskKind": "ctf",
+    "status": "idle",
+    "terminalReason": "unverified_idle",
+    "verificationState": "not_attempted"
+  },
+  "export": {
+    "session": {
+      "sessionId": "bridge-session-fixture",
+      "taskKind": "ctf",
+      "status": "idle",
+      "terminalReason": "verified_true",
+      "verificationState": "accepted",
+      "planningRunId": "planning_fixture",
+      "trustedPlanningVerification": {
+        "source": "planning_verifier_evidence",
+        "verificationOutcome": "correct",
+        "planningRunId": "planning_fixture",
+        "taskId": "plan_fixture",
+        "leaseId": "lease-fixture",
+        "evidenceId": "tool-fixture",
+        "evidenceCreatedAt": 1790270400000,
+        "challengeId": "challenge-fixture"
+      }
+    }
+  }
+}

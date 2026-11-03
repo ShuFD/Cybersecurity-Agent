@@ -1,0 +1,18 @@
+{
+  "index.html": {
+    "file": "assets/app.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "css": [
+      "assets/index.css"
+    ],
+    "assets": [
+      "assets/secheur-agent-logo.png"
+    ]
+  },
+  "src/assets/secheur-agent-logo.png": {
+    "file": "assets/secheur-agent-logo.png",
+    "src": "src/assets/secheur-agent-logo.png"
+  }
+}

@@ -1,0 +1,11 @@
+--- ctf-field-backend.py
++++ ctf-field-backend.py
+@@ -2288,5 +2288,8 @@
+                         "assets_path": data.get("assets_path"),
+                         "run_id": data.get("run_id"),
++                        "session_id": data.get("session_id"),
++                        "terminal_reason": data.get("terminal_reason"),
++                        "verification_state": data.get("verification_state"),
+                     })
+                     self.write_json({"ok": True, "record": rec})
+             else:

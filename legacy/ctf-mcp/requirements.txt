@@ -1,0 +1,26 @@
+# Core CTF Python packages
+pwntools
+angr
+capstone
+unicorn
+ropper
+ROPgadget
+one-gadget
+z3-solver
+cryptography
+pycryptodome
+gmpy2
+requests
+beautifulsoup4
+pillow
+numpy
+aiofile
+bitstring
+bitarray
+
+# Firmware / embedded
+intelhex
+
+# MCP server framework
+mcp==1.29.0
+fastmcp

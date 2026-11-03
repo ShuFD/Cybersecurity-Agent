@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "skills": {
+    "ctf-ai-ml": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-ai-ml/SKILL.md",
+      "computedHash": "6614c80a7c61551b01b1dbd5f7e3627f0c381dc3e2cba761d926de8a43d21ee4"
+    },
+    "ctf-crypto": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-crypto/SKILL.md",
+      "computedHash": "ab5658d757d08c88ad6cc79f4457560ed9fdbfe9632aec18d7f7280df00a3348"
+    },
+    "ctf-forensics": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-forensics/SKILL.md",
+      "computedHash": "520550c24fe00333a96214bb7854f2844a0e3034b42a0dc46eb9e7fa9690777e"
+    },
+    "ctf-malware": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-malware/SKILL.md",
+      "computedHash": "f7074a475c3c83ae0930cea945211af52893472a5f26a00434812d85f0c24558"
+    },
+    "ctf-misc": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-misc/SKILL.md",
+      "computedHash": "54d825f10f8567e5515cc29ede5f5c2da7a9aaad6ad0200f9b51c7df5c6c5027"
+    },
+    "ctf-osint": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-osint/SKILL.md",
+      "computedHash": "a7fb46fd0794eddedab450740bf749889a45fbc998442936ceaa83b1aa1fc0ae"
+    },
+    "ctf-pwn": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-pwn/SKILL.md",
+      "computedHash": "2d4ca3b4f0864778500a6810fc6c99a2d59fc10b3dec0cb7cf3cf6f355960da9"
+    },
+    "ctf-reverse": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-reverse/SKILL.md",
+      "computedHash": "9ee3f58578c2dc8696c468bd8dd20d7370ad722b2971606c9e534d7583598fa4"
+    },
+    "ctf-web": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-web/SKILL.md",
+      "computedHash": "5dff58057d1ab5a13496a7181dd67538dc285f2c9599abdb099e0ea8a93bc97d"
+    },
+    "ctf-writeup": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "ctf-writeup/SKILL.md",
+      "computedHash": "5a412a583dcfddf93378191529dafcbe64512cd1ec7bffc0bd5cf2f9aaf30f81"
+    },
+    "solve-challenge": {
+      "source": "ljagiello/ctf-skills",
+      "sourceType": "github",
+      "skillPath": "solve-challenge/SKILL.md",
+      "computedHash": "096280be94c305a232dc1e82e236e71fe795a2406c8e95b7164e2702bb158a4c"
+    }
+  }
+}

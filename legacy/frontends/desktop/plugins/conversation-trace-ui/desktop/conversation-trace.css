@@ -1,0 +1,378 @@
+.conversation-trace-ui .trace-message {
+  --trace-flow-gap: 16px;
+  --trace-secondary: color-mix(in srgb, var(--text-muted) 92%, var(--text));
+  --trace-tertiary: color-mix(in srgb, var(--text-muted) 82%, var(--bg));
+}
+
+.conversation-trace-ui .trace-message:has(> .turn),
+.conversation-trace-ui .trace-prose-flow:has(> .turn),
+.conversation-trace-ui .trace-prose-flow:has(> .trace-inline-think) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--trace-flow-gap);
+}
+
+.conversation-trace-ui .trace-message > .task-elapsed {
+  margin-bottom: 0;
+  color: var(--text-faint);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.conversation-trace-ui .trace-prose-flow,
+.conversation-trace-ui .trace-prose-turn > .turn-body {
+  width: min(100%, 880px);
+  max-width: min(100%, 880px);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.conversation-trace-ui .trace-turn,
+.conversation-trace-ui .trace-prose-turn,
+.conversation-trace-ui .trace-inline-think {
+  width: min(100%, 880px);
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.conversation-trace-ui .trace-turn {
+  display: flex;
+  flex-direction: column;
+}
+
+.conversation-trace-ui .trace-turn > .trace-turn-header {
+  position: relative;
+  order: 0;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  align-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--trace-secondary);
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.conversation-trace-ui .trace-inline-think {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  color: inherit;
+  font-style: normal;
+  font-size: inherit;
+}
+
+.conversation-trace-ui .trace-inline-think-summary-source {
+  display: none;
+}
+
+.conversation-trace-ui .trace-inline-think > .trace-inline-think-header {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  align-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--trace-secondary);
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.conversation-trace-ui .trace-inline-think > .trace-inline-think-header:hover {
+  background: var(--bg-hover);
+}
+
+.conversation-trace-ui .trace-inline-think > .trace-inline-think-header:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.conversation-trace-ui .trace-turn > .trace-turn-header:hover {
+  background: var(--bg-hover);
+}
+
+.conversation-trace-ui .trace-turn > .trace-turn-header:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.conversation-trace-ui .trace-turn-leading {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  place-items: center;
+  color: var(--trace-secondary);
+}
+
+.conversation-trace-ui .trace-turn-icon,
+.conversation-trace-ui .trace-turn-chevron {
+  display: inline-flex;
+  grid-area: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 100ms ease;
+}
+
+.conversation-trace-ui .trace-turn-icon svg,
+.conversation-trace-ui .trace-turn-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.conversation-trace-ui .trace-turn-chevron {
+  opacity: 0;
+}
+
+.conversation-trace-ui .trace-turn > .trace-turn-header:hover .trace-turn-icon,
+.conversation-trace-ui .trace-turn:not(.collapsed) > .trace-turn-header .trace-turn-icon,
+.conversation-trace-ui .trace-inline-think > .trace-inline-think-header:hover .trace-turn-icon,
+.conversation-trace-ui .trace-inline-think.expanded > .trace-inline-think-header .trace-turn-icon {
+  opacity: 0;
+}
+
+.conversation-trace-ui .trace-turn > .trace-turn-header:hover .trace-turn-chevron,
+.conversation-trace-ui .trace-turn:not(.collapsed) > .trace-turn-header .trace-turn-chevron,
+.conversation-trace-ui .trace-inline-think > .trace-inline-think-header:hover .trace-turn-chevron,
+.conversation-trace-ui .trace-inline-think.expanded > .trace-inline-think-header .trace-turn-chevron {
+  opacity: 1;
+}
+
+.conversation-trace-ui .trace-turn .turn-tag,
+.conversation-trace-ui .trace-inline-think .turn-tag {
+  flex: 0 0 auto;
+  color: var(--trace-secondary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.conversation-trace-ui .trace-turn-separator {
+  flex: 0 0 2px;
+  width: 2px;
+  height: 2px;
+  margin: 0 8px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.conversation-trace-ui .trace-turn .turn-summary,
+.conversation-trace-ui .trace-inline-think .turn-summary {
+  min-width: 0;
+  overflow: hidden;
+  flex: 1 1 auto;
+  color: var(--trace-tertiary);
+  font-size: 14px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-trace-ui .trace-inline-think-body {
+  padding: 4px 0 4px 22px;
+  color: var(--trace-tertiary);
+  font-size: 14px;
+  line-height: 24px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.conversation-trace-ui .trace-turn > .turn-body {
+  order: 1;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 4px 0 4px 22px;
+  border: 0;
+  color: var(--trace-tertiary);
+  font-size: 14px;
+  line-height: 24px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.conversation-trace-ui .trace-turn.collapsed > .turn-body {
+  display: none;
+}
+
+.conversation-trace-ui .trace-turn > .turn-narrative {
+  order: 2;
+  display: block !important;
+  width: 100%;
+  margin: var(--trace-flow-gap) 0 0;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.conversation-trace-ui .trace-turn > .turn-body > .tool-detail-turn {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.conversation-trace-ui .trace-turn > .turn-body > .tool-detail-turn > .tool-detail-header {
+  display: none;
+}
+
+.conversation-trace-ui .trace-turn > .turn-body > .tool-detail-turn > .tool-detail-body {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.conversation-trace-ui .trace-turn > .turn-body .tool-args-code {
+  max-height: 260px;
+  margin: 4px 0;
+  overflow: auto;
+}
+
+.conversation-trace-ui .conversation-tool-detail {
+  display: grid;
+  width: 100%;
+  gap: 12px;
+}
+
+.conversation-trace-ui .conversation-tool-section {
+  min-width: 0;
+}
+
+.conversation-trace-ui .conversation-tool-section-label {
+  margin-bottom: 4px;
+  color: var(--text-faint);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.conversation-trace-ui .conversation-tool-section-content {
+  max-height: 320px;
+  margin: 0;
+  padding: 10px 12px;
+  overflow: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.conversation-trace-ui .trace-turn-error > .trace-turn-header .trace-turn-icon,
+.conversation-trace-ui .trace-turn-error > .trace-turn-header .turn-tag,
+.conversation-trace-ui .trace-turn-error > .trace-turn-header .turn-summary,
+.conversation-trace-ui .conversation-tool-error .conversation-tool-section-label,
+.conversation-trace-ui .conversation-tool-error .conversation-tool-section-content {
+  color: var(--err);
+}
+
+.conversation-trace-ui .trace-turn-stopped > .trace-turn-header .trace-turn-icon,
+.conversation-trace-ui .trace-turn-stopped > .trace-turn-header .turn-tag,
+.conversation-trace-ui .trace-turn-stopped > .trace-turn-header .turn-summary {
+  color: var(--warn);
+}
+
+.conversation-trace-ui .trace-prose-turn > .turn-header {
+  display: none;
+}
+
+.conversation-trace-ui .trace-prose-turn > .turn-body,
+.conversation-trace-ui .trace-prose-turn.collapsed > .turn-body {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.conversation-trace-ui .trace-prose-turn > .turn-body > .turn-rendered-md {
+  color: inherit;
+  font: inherit;
+}
+
+.conversation-trace-ui .trace-turn-busy > .trace-turn-header::after {
+  position: absolute;
+  inset-block: 0;
+  left: -300px;
+  width: 300px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--bg) 60%, transparent) 55%,
+    transparent 100%
+  );
+  content: "";
+  pointer-events: none;
+  animation: conversation-trace-row-sweep 2.6s ease-out infinite;
+}
+
+@keyframes conversation-trace-row-sweep {
+  0% { left: -300px; }
+  90%, 100% { left: 100%; }
+}
+
+@media (max-width: 720px) {
+  .conversation-trace-ui #messages {
+    padding-right: 64px;
+  }
+
+  .conversation-trace-ui .trace-prose-flow,
+  .conversation-trace-ui .trace-prose-turn > .turn-body,
+  .conversation-trace-ui .trace-turn,
+  .conversation-trace-ui .trace-prose-turn,
+  .conversation-trace-ui .trace-inline-think {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .conversation-trace-ui .trace-prose-flow,
+  .conversation-trace-ui .trace-prose-turn > .turn-body,
+  .conversation-trace-ui .trace-turn > .turn-narrative {
+    font-size: 15px;
+    line-height: 26px;
+  }
+
+  .conversation-trace-ui .conversation-tool-section-content {
+    max-height: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversation-trace-ui .trace-turn-icon,
+  .conversation-trace-ui .trace-turn-chevron {
+    transition: none;
+  }
+
+  .conversation-trace-ui .trace-turn-busy > .trace-turn-header::after {
+    animation: none;
+  }
+}

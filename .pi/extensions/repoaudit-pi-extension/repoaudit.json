@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "mode": "local-readonly",
+  "maxFiles": 10000,
+  "maxFileBytes": 512000,
+  "excludedDirectories": [
+    ".git",
+    ".github",
+    ".vscode",
+    ".idea",
+    "build",
+    "dist",
+    "out",
+    "bin",
+    "target",
+    "vendor",
+    "pkg",
+    "node_modules",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    "venv",
+    "env",
+    "obj",
+    "Debug",
+    "Release",
+    "CMakeFiles"
+  ],
+  "requireHumanConfirmation": true
+}

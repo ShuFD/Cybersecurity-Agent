@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ctf-toolbox": {
+      "transport": "streamable-http",
+      "url": "http://ctf-toolbox:8000/mcp",
+      "timeout": 120
+    }
+  }
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "target": "failproof",
+    "eventId": "af8a3cd1-5d24-47b5-a4e9-66eb22c322b5",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "5f839df1-d5e9-4736-b7ba-74abcb09970a",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "30b97cf4-6949-4d34-ac38-40cfdbe7d84d",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "4032c052-33c9-48b1-bc5c-9af5a0f360dd",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "21d129d7-adeb-4fb3-8531-90b58d2f9297",
+    "error": "proposedIntents[0].objective exceeds limit",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "d7a87d42-5b43-4970-9bc3-f505bbf7558f",
+    "error": "Coverage cites evidence outside this run",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "86b60c60-9838-44f2-a2a7-8fd67ace888f",
+    "error": "Coverage cites evidence outside this run",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "610c2f10-b222-4808-bc83-6629648b1468",
+    "error": "Coverage cites evidence outside this run",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "9ca56c9e-cbe3-4a49-9073-264ec67f3435",
+    "error": "Coverage cites evidence outside this run",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "632d5b4e-3cb7-4885-a862-d8003828a82e",
+    "error": "Coverage cites evidence outside this run",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "08747356-f6eb-48e5-8231-c2d9e3beb215",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "89063406-17c7-42de-8c9d-1499a05050e1",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "7e0c1cce-418f-4463-bba8-977b04e01465",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "a1edc6b4-e2d7-417e-a06a-9952ba9fbecc",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "23978aae-26a4-46fc-8c05-2a2214d19602",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "bc3af2d9-15e5-4ee6-a1e2-7b085f5a89c5",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 2
+  },
+  {
+    "target": "failproof",
+    "eventId": "98ae11ff-bc24-47a2-986c-502af06e32d1",
+    "error": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "rejections": 1
+  },
+  {
+    "target": "failproof",
+    "eventId": "6fbf1862-f243-4b41-ac1a-b43f01df258b",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 2
+  },
+  {
+    "target": "sop",
+    "eventId": "b0d3e686-58a0-4a23-bfad-989f2a3a6f69",
+    "error": "proposedIntents[0].objective exceeds limit; proposedIntents[1].objective exceeds limit",
+    "rejections": 1
+  },
+  {
+    "target": "sop",
+    "eventId": "0909476b-10c6-4e5f-8240-c08319684163",
+    "error": "proposedIntents[0].objective exceeds limit; proposedIntents[1].objective exceeds limit",
+    "rejections": 2
+  },
+  {
+    "target": "sop",
+    "eventId": "2189c4a1-4990-40b4-8503-402e48a27c12",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 1
+  },
+  {
+    "target": "sop",
+    "eventId": "5d85f0d1-78f4-49b1-9505-adf23a43c0c6",
+    "error": "proposedIntents[0].objective exceeds limit; proposedIntents[0].successCriteria contains invalid text",
+    "rejections": 2
+  },
+  {
+    "target": "sop",
+    "eventId": "5596a9ea-7134-411f-b094-5c8adab5c951",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 1
+  },
+  {
+    "target": "sop",
+    "eventId": "41b5eb1c-329e-432c-b8ce-4b6bfd09f373",
+    "error": "proposedIntents[0].rationale exceeds limit; proposedIntents[1].objective exceeds limit; proposedIntents[1].rationale exceeds limit; rationaleSummary exceeds limit",
+    "rejections": 2
+  },
+  {
+    "target": "sop",
+    "eventId": "61c7b066-a190-43ea-b312-b1c213d52e94",
+    "error": "proposedIntents[0].objective exceeds limit; proposedIntents[0].rationale exceeds limit",
+    "rejections": 1
+  },
+  {
+    "target": "sop",
+    "eventId": "af4776f4-c845-4f75-9e5d-902a43754688",
+    "error": "proposedIntents[0].rationale exceeds limit",
+    "rejections": 2
+  },
+  {
+    "target": "sop",
+    "eventId": "6d08b7fb-042d-4c30-a219-3dcb6b4a1b85",
+    "error": "Increment evidence must cite exact original observations in this run",
+    "rejections": 1
+  }
+]

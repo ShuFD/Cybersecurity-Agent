@@ -1,0 +1,11 @@
+nyu/development/2013/CSAW-Quals/crypto/CSAWpad
+nyu/development/2013/CSAW-Quals/misc/Life
+nyu/development/2013/CSAW-Quals/pwn/csaw_diary
+nyu/development/2014/CSAW-Finals/misc/pps
+nyu/development/2014/CSAW-Finals/rev/odd
+nyu/development/2015/CSAW-Quals/crypto/eps
+nyu/development/2015/CSAW-Quals/forensics/flash
+nyu/development/2015/CSAW-Quals/rev/wyvern
+nyu/development/2015/CSAW-Quals/web/throwback
+nyu/development/2016/CSAW-Quals/forensics/Kill
+nyu/test/2017/CSAW-Quals/crypto/baby_crypt

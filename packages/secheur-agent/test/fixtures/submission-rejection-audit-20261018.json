@@ -1,0 +1,402 @@
+[
+  {
+    "mode": "hypothesis",
+    "eventId": "ddb993a1-fd99-4f79-9872-c726e7d4ae13",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "f91db395-a81b-4431-b14a-1e6fa3c1b656",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "0253631c-f901-412a-9022-3819d4a39493",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "a2bc097b-04e8-4b8a-abbb-83ee89313760",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "476fa65f-da0b-4d48-9994-c75d4c6855fa",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "1747d4cc-dbfc-49f5-94a2-03a72e156082",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "ace7d082-0f85-4fba-88ff-c77d759f54a9",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "f099fc53-e075-4574-acd7-cb20fd857c41",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "95a36591-82db-4e65-9042-f3727aaac5c9",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "f358cfb2-7f2b-46e5-b4f1-b3aa4f86149a",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "02d2001e-aaf0-46a3-b1cb-2b77f3fbf0cc",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "fabfee7b-bc9c-4bd5-8348-ee902e87dadd",
+    "diagnostic": "Unknown, refuted or review-required hypothesis binding; use an explicit review_basis task",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "b439b741-083b-4cd9-9a65-d092ebf25c51",
+    "diagnostic": "Unknown, refuted or review-required hypothesis binding; use an explicit review_basis task",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "e04fea4e-185c-437e-8fba-c8cd0e5d0b04",
+    "diagnostic": "Refuted or review-required premise cannot support a new hypothesis",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "8d837a6e-d679-4368-809f-769a1adfed3c",
+    "diagnostic": "Refuted or review-required premise cannot support a new hypothesis",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "278957f3-8471-49e5-ba29-74fc89cb72c7",
+    "diagnostic": "Refuted or review-required premise cannot support a new hypothesis",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "eedf5dbd-029a-44e7-a318-157e18d9e3bc",
+    "diagnostic": "Refuted or review-required premise cannot support a new hypothesis",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "abb474d1-9027-47b8-91be-a58119b7f4ad",
+    "diagnostic": "Refuted or review-required premise cannot support a new hypothesis",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "8a84c1a8-e6f9-4c17-9590-0681235573aa",
+    "diagnostic": "Input producer has ended without the required artifact; gather the missing observation independently",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "3fe88daf-f328-464c-833e-dee3d99b5dfe",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "c9905890-e5bf-4e24-98da-7d81bcf75745",
+    "diagnostic": "Hypothesis basis must reference same-run evidence, existing task delivery or human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "ba13deee-a636-4e3e-a07b-6a51b3277549",
+    "diagnostic": "Task T1-read-chall cannot depend on itself",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "0880dfb5-4ac7-4c74-8b6a-e0c560a90418",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "7a7df6c9-117f-4abb-8259-b222c9e473e5",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "9bf8581e-0041-4133-8c47-a196a8b21176",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "0876c726-258a-45d9-8486-d86a9d233e5b",
+    "diagnostic": "Hypothesis basis must reference same-run evidence, existing task delivery or human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "92f6feae-2d97-46ce-917b-ed07726e5a14",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "e2abbd80-761c-4d90-83ba-427593f28c64",
+    "diagnostic": "Input requires another same-run task and exactly one evidenceId or artifactPath",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "18e4e799-973a-4985-988c-43e7e24ee964",
+    "diagnostic": "unknown input evidence: human:goal",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "468c763d-b9f3-4518-9664-fa1f507ba6a5",
+    "diagnostic": "Waiting/completion cannot introduce unassigned hypotheses or tasks",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "d74498b8-f424-442e-b94f-6c9bd28e041d",
+    "diagnostic": "Waiting/completion cannot introduce unassigned hypotheses or tasks",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "hypothesis",
+    "eventId": "10563c79-ddb8-466c-848c-97e6a8dac622",
+    "diagnostic": "task key already exists in this run: t-verify-flag (plan_5bde5e302fd46b10311889d0)",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "7c6e2189-49fb-4e83-a3fa-7b6b6907feb0",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_52bb521e67610bb19e84433f"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "b54f3f66-76a1-48e1-ad8c-280f9515ea18",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_52bb521e67610bb19e84433f"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "c489e5c5-be3e-4c08-a4c0-143bcca81cf8",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_60fea31b4e142efb0ce687b5"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "3ffe1872-c676-4541-a673-2bd6deb0fccf",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_17b415cadbb84de90fbdbee3"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "c917fe34-0c49-4edd-8b57-79cc24c2aeb6",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_17b415cadbb84de90fbdbee3"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "a3a63dab-ea0e-4c76-ac7e-a5757246dc9a",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_17b415cadbb84de90fbdbee3"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "1c305867-a32e-4d91-a045-5b112d0885b7",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_17b415cadbb84de90fbdbee3"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "8796be65-6481-494b-bc96-fd8562779ce7",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_17b415cadbb84de90fbdbee3"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "b30d662b-ce7e-4259-90db-3aa17891ba39",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_7295ab4a7f9f92eb7d78fc70"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "afc092cb-052c-48dd-8de1-53a6acc0f095",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_a91b34733f6dae290a954b52"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "755998e8-0bcc-4bfd-bb67-bc872687ecbd",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_a91b34733f6dae290a954b52"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "72a46ae4-6a41-4d47-a3e8-8e5b3f09af64",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_a91b34733f6dae290a954b52"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "ca470401-7869-4c75-a90c-4133fb7ffcf1",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_a91b34733f6dae290a954b52"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "00c70fe2-c260-4c79-a90b-41a30d1f8667",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_a91b34733f6dae290a954b52"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "7787be6a-e4fb-4606-b415-98333308025c",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_80766f1da6a9cb51c6ed2a77"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "b993107d-7a1b-4af5-b457-b6970415aa4f",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_753e92f35f43347b28ae2b61"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "d1edd364-b08c-44c9-badc-181309489c47",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_725b69ab61b02af84fb3073f"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "e0c79fb0-ab24-44e0-b428-5c38cbbd2d95",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [
+      "intent_725b69ab61b02af84fb3073f"
+    ],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "15ebd3b6-864a-4956-8777-976df381bb98",
+    "diagnostic": "Waiting must name a current owner or live dependency; append useful work when nobody can advance it",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  },
+  {
+    "mode": "cairn",
+    "eventId": "cfd57e86-726e-4938-b047-9b2f324132f6",
+    "diagnostic": "Explain the substantive increment relative to saved work; preserve owners when there is no useful new work",
+    "liveOwnerIds": [],
+    "source": "actual_rejection_metadata_only"
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "sourceBundle": "plan-trace-review-20261014-reviewed.zip",
+  "bundleSha256": "cc45a4e90adbcfb61a06848b0a418564db6205582285c42a16798782eda74bc0",
+  "records": [
+    {
+      "source": {
+        "member": "runs/08-current-cairn-sop/state/planning/cairn/planning_cairn_1709032bdeeccdd68ebbc5f69b57070f/host.sqlite",
+        "sha256": "0f8198f87331539b0f6494548175cf7e880d8c852561daaa4c0fb43e1a2661e1"
+      },
+      "run": "08-current-cairn-sop",
+      "type": "assistant_message_end",
+      "payload": {
+        "stopReason": "error",
+        "errorStage": "model_response",
+        "outputChars": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "error": "429: {\"type\":\"rate_limit_error\",\"message\":\"\u5df2\u8fbe\u5230 Token Plan \u7528\u91cf\u4e0a\u9650\uff1a\u8bf7\u5347\u7ea7 Token Plan \u5957\u9910\u6216\u8d2d\u4e70\u79ef\u5206\u8865\u5145\u7528\u91cf\u3002 (2056)\",\"http_code\":\"429\"}",
+        "role": "planner",
+        "elapsedMs": 151006,
+        "engine": "cairn",
+        "runId": "planning_cairn_1709032bdeeccdd68ebbc5f69b57070f"
+      },
+      "rowid": 605,
+      "createdAt": 1791922699658
+    },
+    {
+      "source": {
+        "member": "runs/08-current-cairn-sop/state/planning/cairn/planning_cairn_1709032bdeeccdd68ebbc5f69b57070f/host.sqlite",
+        "sha256": "0f8198f87331539b0f6494548175cf7e880d8c852561daaa4c0fb43e1a2661e1"
+      },
+      "run": "08-current-cairn-sop",
+      "type": "assistant_message_end",
+      "payload": {
+        "stopReason": "error",
+        "errorStage": "model_response",
+        "outputChars": 5878,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "error": "terminated",
+        "role": "planner",
+        "elapsedMs": 74216,
+        "engine": "cairn",
+        "runId": "planning_cairn_1709032bdeeccdd68ebbc5f69b57070f"
+      },
+      "rowid": 12,
+      "createdAt": 1791921823305
+    }
+  ]
+}

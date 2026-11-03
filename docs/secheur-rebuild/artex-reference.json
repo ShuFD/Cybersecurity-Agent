@@ -1,0 +1,25 @@
+{
+	"repository": "https://github.com/BaaRai/ARTEX.git",
+	"commit": "a9c7a75a73e4aadbe0e75465eeafcd742db4930e",
+	"commitDate": "2026-10-22T14:51:28+02:00",
+	"reviewedAt": "2026-10-23",
+	"sourceLicense": "AGPL-3.0",
+	"implementation": "TypeScript application-layer reimplementation of graph semantics and event scheduling; no Go code or domain prompts copied",
+	"constants": {
+		"debounceMs": 800,
+		"heartbeatMs": 600000,
+		"coldRounds": 6,
+		"minimumFoldSize": 2
+	},
+	"sourceFiles": [
+		"db/constants.go",
+		"db/exploration.go",
+		"db/assets.go",
+		"db/digest.go",
+		"agent/planner.go",
+		"agent/worker.go",
+		"agent/coldgraph.go",
+		"server/engine.go",
+		"server/scheduler.go"
+	]
+}

@@ -1,0 +1,239 @@
+name: ${COMPOSE_PROJECT_NAME:-secheur-agent}
+
+services:
+  agent:
+    image: ${SECHEUR_IMAGE:-secheur-agent:local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      args:
+        http_proxy: ${BUILD_HTTP_PROXY:-}
+        https_proxy: ${BUILD_HTTP_PROXY:-}
+        no_proxy: localhost,127.0.0.1
+    restart: unless-stopped
+    environment:
+      BRIDGE_HOST: 0.0.0.0
+      BRIDGE_PORT: 14168
+      SECHEUR_PROJECT_ROOT: /workspace
+      # The attach-only bridge shares Main Agent registrations and state through /data.
+      SECHEUR_CONFIG_DIR: ${SECHEUR_CONFIG_DIR:-/data}
+      SECHEUR_PYTHON: /opt/secheur-python/bin/python
+      SECHEUR_PERMISSION_MODE: ${SECHEUR_PERMISSION_MODE:-default}
+      SECHEUR_LANG: ${SECHEUR_LANG:-zh}
+      SECHEUR_AGENT_OUTPUT_IDLE_TIMEOUT: ${SECHEUR_AGENT_OUTPUT_IDLE_TIMEOUT:-90}
+      REPOAUDIT_ROOT: /opt/repoaudit
+      REPOAUDIT_PYTHON: /opt/repoaudit-venv/bin/python
+      REPOAUDIT_REQUIRE_EXPLICIT_ROOT: "1"
+      REPOAUDIT_REQUIRE_API_KEY: ${REPOAUDIT_REQUIRE_API_KEY:-1}
+      REPOAUDIT_MODEL: ${REPOAUDIT_MODEL:-claude-3.7}
+      # RepoAudit preflight selects the credential that matches
+      # REPOAUDIT_MODEL; the adapter forwards only that credential to Python.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DEEPSEEK_API_KEY2: ${DEEPSEEK_API_KEY2:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      REPOAUDIT_TIMEOUT_MS: ${REPOAUDIT_TIMEOUT_MS:-1800000}
+      REPOAUDIT_LOCK_TIMEOUT_MS: ${REPOAUDIT_LOCK_TIMEOUT_MS:-300000}
+      REPOAUDIT_LOCK_STALE_MS: ${REPOAUDIT_LOCK_STALE_MS:-120000}
+      REPOAUDIT_HEARTBEAT_MS: ${REPOAUDIT_HEARTBEAT_MS:-25000}
+      # Reserved for a future multi-replica coordinator. The current adapter
+      # only enforces its local file lock and does not consume these endpoints.
+      REPOAUDIT_COORDINATION_MODE: ${REPOAUDIT_COORDINATION_MODE:-file-lock}
+      REPOAUDIT_CENTRAL_QUEUE_URL: ${REPOAUDIT_CENTRAL_QUEUE_URL:-}
+      REPOAUDIT_SHARED_LEASE_URL: ${REPOAUDIT_SHARED_LEASE_URL:-}
+      SECHEUR_DEEPSEEK_API_KEY: ${SECHEUR_DEEPSEEK_API_KEY:-}
+      SECHEUR_DEEPSEEK_BASE_URL: ${SECHEUR_DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      SECHEUR_GLM_API_KEY: ${SECHEUR_GLM_API_KEY:-}
+      SLAB_MATCH_HOST: ${SLAB_MATCH_HOST:-}
+      SLAB_MATCH_ID: ${SLAB_MATCH_ID:-}
+      SLAB_AGENT_ACCESSKEY: ${SLAB_AGENT_ACCESSKEY:-}
+      SLAB_EXERCISE_DETAIL_BATCH_SIZE: ${SLAB_EXERCISE_DETAIL_BATCH_SIZE:-5}
+      SLAB_EXERCISE_DETAIL_BATCH_INTERVAL_MS: ${SLAB_EXERCISE_DETAIL_BATCH_INTERVAL_MS:-10000}
+      WORKLIST_SYNC_INTERVAL_MS: ${WORKLIST_SYNC_INTERVAL_MS:-30000}
+      WORKLIST_MAX_ENVIRONMENTS: ${WORKLIST_MAX_ENVIRONMENTS:-3}
+      WORKLIST_MAX_FAILURES: ${WORKLIST_MAX_FAILURES:-2}
+      WORKLIST_MAX_FLAG_ATTEMPTS: ${WORKLIST_MAX_FLAG_ATTEMPTS:-3}
+      WORKLIST_EXCLUDE_EXERCISE_IDS: ${WORKLIST_EXCLUDE_EXERCISE_IDS:-}
+      WORKLIST_ULTRACODE: ${WORKLIST_ULTRACODE:-0}
+      COMPETITION_MAX_ENVIRONMENTS: ${COMPETITION_MAX_ENVIRONMENTS:-3}
+      COMPETITION_ENVIRONMENT_LEASE_TTL_MS: ${COMPETITION_ENVIRONMENT_LEASE_TTL_MS:-1800000}
+      COMPETITION_ATTACHMENT_MAX_CONCURRENT: ${COMPETITION_ATTACHMENT_MAX_CONCURRENT:-3}
+      COMPETITION_ATTACHMENT_MAX_BYTES: ${COMPETITION_ATTACHMENT_MAX_BYTES:-536870912}
+      SECHEUR_COMPETITION_DATABASE: ${SECHEUR_COMPETITION_DATABASE:-/data/competition.sqlite}
+      SECHEUR_COMPETITION_SOCKET: ${SECHEUR_COMPETITION_SOCKET:-/data/competition.sock}
+      CTFD_URL: ${CTFD_URL:-http://ctfd:8000}
+      CTFD_API_TOKEN: ${CTFD_API_TOKEN:-}
+      CTFD_AGENT_API_URL: ${CTFD_AGENT_API_URL:-}
+      CTFD_AGENT_ACCESS_KEY: ${CTFD_AGENT_ACCESS_KEY:-}
+      SECHEUR_SOLVER_DISPATCH_INTERVAL_MS: ${SECHEUR_SOLVER_DISPATCH_INTERVAL_MS:-2000}
+      CTF_LAB_GATEWAY_URL: ${CTF_LAB_GATEWAY_URL:-http://ctf-lab-gateway:8090}
+      BIGMODEL_API_KEY: ${BIGMODEL_API_KEY:-}
+      BIGMODEL_RESPONSES_ENDPOINT: ${BIGMODEL_RESPONSES_ENDPOINT:-https://open.bigmodel.cn/api/v1/responses}
+      BIGMODEL_MODEL: ${BIGMODEL_MODEL:-glm-5.3}
+      SECHEUR_MODEL_REQUEST_TIMEOUT_MS: ${SECHEUR_MODEL_REQUEST_TIMEOUT_MS:-120000}
+      ULTRACODE_AGENT_MODEL: ${ULTRACODE_AGENT_MODEL:-secheur-deepseek/deepseek-v4-flash}
+      ULTRACODE_THINKING_LEVEL: ${ULTRACODE_THINKING_LEVEL:-max}
+      ULTRACODE_FLAG_VERIFY: ${ULTRACODE_FLAG_VERIFY:-auto}
+      ULTRACODE_CHALLENGE_ID: ${ULTRACODE_CHALLENGE_ID:-}
+      ULTRACODE_VERIFIER_MODEL: ${ULTRACODE_VERIFIER_MODEL:-secheur-deepseek/deepseek-v4-flash}
+      ULTRACODE_VERIFIER_API: ${ULTRACODE_VERIFIER_API:-}
+      ULTRACODE_VERIFIER_BASE_URL: ${ULTRACODE_VERIFIER_BASE_URL:-}
+      ULTRACODE_VERIFIER_API_KEY: ${ULTRACODE_VERIFIER_API_KEY:-}
+      ULTRACODE_VERIFIER_HEADERS: ${ULTRACODE_VERIFIER_HEADERS:-}
+      ULTRACODE_VERIFIER_WHOLE_ENDPOINT: ${ULTRACODE_VERIFIER_WHOLE_ENDPOINT:-}
+      ULTRACODE_MODE: ${ULTRACODE_MODE:-}
+      CTF_WORKDIR: /work
+      # Proxy for npm/npx/pip inside the container. The bridge process itself
+      # does not install an undici dispatcher, so model traffic stays direct.
+      HTTP_PROXY: ${RUNTIME_HTTP_PROXY:-}
+      HTTPS_PROXY: ${RUNTIME_HTTP_PROXY:-}
+      NO_PROXY: api.deepseek.com,llm-gateway.dasctf.com,open.bigmodel.cn,pro.dasctf.com,pro-resource.dasctf.com,127.0.0.1,localhost,ctf-toolbox
+    ports:
+      - "${SECHEUR_BIND_HOST:-127.0.0.1}:${SECHEUR_PORT:-14168}:14168"
+    volumes:
+      - "${SECHEUR_STATE_MOUNT:-./.secheur-agent}:/data"
+      - "${SECHEUR_WORKSPACE_MOUNT:-secheur-workspace}:/workspace"
+      - ./api_doc.md:/workspace/api_doc.md:ro
+      - "${CTF_WORK_MOUNT:-ctf-work}:/work"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stop_grace_period: 30s
+
+  ctfd-db:
+    profiles: ["local-ctf"]
+    image: mariadb:11.4.5
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ctfd
+      MARIADB_USER: ${CTFD_DB_USER:-ctfd}
+      MARIADB_PASSWORD: ${CTFD_DB_PASSWORD:-ctfd-local-password}
+      MARIADB_ROOT_PASSWORD: ${CTFD_DB_ROOT_PASSWORD:-ctfd-local-root-password}
+    volumes:
+      - ctfd-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p$$MARIADB_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  ctfd-cache:
+    profiles: ["local-ctf"]
+    image: redis:7.4.2-alpine
+    restart: unless-stopped
+    volumes:
+      - ctfd-cache:/data
+
+  ctfd:
+    profiles: ["local-ctf"]
+    image: ctfd/ctfd:3.7.7
+    restart: unless-stopped
+    depends_on:
+      ctfd-db:
+        condition: service_healthy
+      ctfd-cache:
+        condition: service_started
+    environment:
+      SECRET_KEY: ${CTFD_SECRET_KEY:-replace-this-local-secret}
+      DATABASE_URL: mysql+pymysql://${CTFD_DB_USER:-ctfd}:${CTFD_DB_PASSWORD:-ctfd-local-password}@ctfd-db:3306/ctfd
+      REDIS_URL: redis://ctfd-cache:6379/0
+      WORKERS: ${CTFD_WORKERS:-1}
+      CTFD_AGENT_ACCESS_KEY: ${CTFD_AGENT_ACCESS_KEY:-}
+      CTFD_AGENT_USER_ID: ${CTFD_AGENT_USER_ID:-}
+      CTFD_AGENT_GATEWAY_URL: ${CTFD_AGENT_GATEWAY_URL:-http://ctf-lab-gateway:8090}
+    ports:
+      - "${CTFD_BIND_HOST:-127.0.0.1}:${CTFD_PORT:-18000}:8000"
+    volumes:
+      - ctfd-data:/var/uploads
+      - ./docker/ctfd-agent-plugin:/opt/CTFd/CTFd/plugins/secheur_agent:ro
+    stop_grace_period: 30s
+
+  ctf-lab-gateway:
+    profiles: ["local-ctf"]
+    build:
+      context: ./docker/ctf-lab-gateway
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      CTF_LAB_GATEWAY_HOST: 0.0.0.0
+      CTF_LAB_GATEWAY_PORT: 8090
+      CTF_LAB_CHALLENGE_CONFIG: /config/challenges.json
+      CTF_LAB_STATE_FILE: /data/environments.json
+      CTF_LAB_MAX_ENVIRONMENTS: ${CTF_LAB_MAX_ENVIRONMENTS:-3}
+      CTF_LAB_ENVIRONMENT_TTL_SECONDS: ${CTF_LAB_ENVIRONMENT_TTL_SECONDS:-1800}
+      CTF_LAB_ADVERTISE_HOST: ${CTF_LAB_ADVERTISE_HOST:-host.docker.internal}
+    expose:
+      - "8090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ctf-lab-state:/data
+      - "${CTF_LAB_CHALLENGE_CONFIG:-./docker/ctf-lab-gateway/challenges.example.json}:/config/challenges.json:ro"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/healthz', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    stop_grace_period: 30s
+
+  ctf-toolbox:
+    profiles: ["ctf"]
+    image: ${CTF_MCP_IMAGE:-ctf-mcp:ubuntu24-core}
+    platform: ${CTF_PLATFORM:-linux/amd64}
+    build:
+      context: ./legacy/ctf-mcp
+      dockerfile: Dockerfile
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      args:
+        INSTALL_SAGE: ${INSTALL_SAGE:-1}
+        INSTALL_GHIDRA: ${INSTALL_GHIDRA:-1}
+        INSTALL_EXTRA_MCPS: ${INSTALL_EXTRA_MCPS:-0}
+        http_proxy: ${BUILD_HTTP_PROXY:-}
+        https_proxy: ${BUILD_HTTP_PROXY:-}
+        no_proxy: localhost,127.0.0.1
+    restart: unless-stopped
+    command:
+      - /opt/ctf-venv/bin/python3
+      - /opt/ctf-mcp/server.py
+      - --transport
+      - streamable-http
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+    environment:
+      CTF_WORKDIR: /work
+      CTF_HOST_WORKDIRS: /work
+      CTF_ALLOWED_ROOTS: /work:/tmp
+      CTF_MCP_TRANSPORT: streamable-http
+      CTF_MCP_HOST: 0.0.0.0
+      CTF_MCP_PORT: 8000
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - "${CTF_MCP_BIND_HOST:-127.0.0.1}:${CTF_MCP_PORT:-18080}:8000"
+    volumes:
+      - "${CTF_WORK_MOUNT:-ctf-work}:/work"
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import socket; s=socket.create_connection(('127.0.0.1', 8000), 2); s.close()"
+      interval: 20s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    stop_grace_period: 30s
+
+volumes:
+  secheur-state:
+  secheur-workspace:
+  ctf-work:
+  ctfd-db:
+  ctfd-cache:
+  ctfd-data:
+  ctf-lab-state:

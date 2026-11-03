@@ -1,0 +1,24 @@
+{
+  "defaultProfile": "auto",
+  "profiles": {
+    "auto": {
+      "high": {
+        "model": "secheur-glm/glm-5.3",
+        "thinking": "max",
+        "fallbacks": ["secheur-deepseek/deepseek-v4-flash"]
+      },
+      "medium": {
+        "model": "secheur-deepseek/deepseek-v4-flash",
+        "thinking": "max"
+      },
+      "low": {
+        "model": "secheur-deepseek/deepseek-v4-flash",
+        "thinking": "max"
+      }
+    }
+  },
+  "rules": [
+    { "matches": "analy[sz]e?|vulnerabili|exploit|payload|bypass|disasm|decompil|shellcode|gadget|primitive|reverse.engineer|ROP|POP|chain.{0,20}primitive|primitive.{0,20}chain|reason.{0,5}about|root cause|hypothes|design.{0,5}payload|craft.{0,5}payload|debug.{0,15}memory|漏洞|利用.{0,8}方式|分析.{0,15}思路|逆向|原理|解题.{0,5}思路|攻击.{0,8}路径|思路.{0,10}利用|pwn|crypto|reverse", "tier": "high" }
+  ],
+  "largeContextThreshold": 600000
+}

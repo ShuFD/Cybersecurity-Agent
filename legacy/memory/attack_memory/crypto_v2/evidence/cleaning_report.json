@@ -1,0 +1,12 @@
+{
+  "artifact": "crypto_cards",
+  "candidates": 5,
+  "input_items": 25,
+  "published": 5,
+  "reasons": {
+    "generic_preconditions": 14,
+    "generic_steps": 16,
+    "missing_validation_step": 4
+  },
+  "rejected": 20
+}

@@ -1,0 +1,12 @@
+{
+  "embeddings_file": "embeddings.jsonl",
+  "record_count": 185,
+  "records_file": "records.jsonl",
+  "retrieval": {
+    "keyword": "BM25",
+    "rerank": "attack-pattern-field-boost",
+    "vector": "hashing-embedding"
+  },
+  "schema_version": "attack-memory-index.v1",
+  "vector_dim": 384
+}

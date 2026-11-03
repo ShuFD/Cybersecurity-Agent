@@ -1,0 +1,30 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"paths": {
+			"@earendil-works/pi-coding-agent": ["../coding-agent/src/index.ts"],
+			"@earendil-works/pi-coding-agent/*": ["../coding-agent/src/*"],
+			"@earendil-works/pi-agent-core": ["../agent/src/index.ts"],
+			"@earendil-works/pi-agent-core/node": ["../agent/src/node.ts"],
+			"@earendil-works/pi-ai": ["../ai/src/index.ts"],
+			"@earendil-works/pi-ai/*": ["../ai/src/*"],
+			"@earendil-works/pi-ai/compat": ["../ai/src/compat.ts"],
+			"@earendil-works/pi-ai/oauth": ["../ai/src/oauth.ts"],
+			"@earendil-works/pi-ai/providers/all": ["../ai/src/providers/all.ts"],
+			"@earendil-works/pi-client": ["../client/src/index.ts"],
+			"@earendil-works/pi-client/unix": ["../client/src/unix.ts"],
+			"@earendil-works/pi-protocol": ["../protocol/src/index.ts"],
+			"@earendil-works/pi-server": ["../server/src/index.ts"],
+			"@earendil-works/pi-server/unix": ["../server/src/transports/unix/index.ts"],
+			"@earendil-works/pi-session-backend-sqlite-node": ["../session-backends/sqlite-node/src/index.ts"],
+			"@earendil-works/pi-telemetry": ["../telemetry/src/index.ts"],
+			"@earendil-works/pi-tui": ["../tui/src/index.ts"],
+			"typebox": ["../../node_modules/typebox"]
+		},
+		"types": ["node", "vitest"]
+	},
+	"include": ["src/**/*.ts", "test/**/*.ts", "../coding-agent/src/utils/highlight-js-lib-index.d.ts"]
+}

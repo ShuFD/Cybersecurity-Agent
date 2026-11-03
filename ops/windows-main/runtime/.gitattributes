@@ -1,0 +1,2 @@
+# Preserve byte-for-byte runtime snapshot hashes on Windows and Linux.
+*.js -text

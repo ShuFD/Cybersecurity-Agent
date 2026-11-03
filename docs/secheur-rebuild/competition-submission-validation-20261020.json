@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-20",
+  "baseCommit": "025e7ec0907251bac0e4484399284fa2aec589c9",
+  "scope": "Offline real-competition submission lifecycle; no solving content",
+  "checks": {
+    "lifecycle": {
+      "passed": 18,
+      "failed": 0,
+      "includesHistoricalMetadataReplays": 4
+    },
+    "brokerStoreAdapters": {
+      "passed": 14,
+      "failed": 0
+    },
+    "desktopBridgeTargeted": {
+      "passed": 4,
+      "failed": 0
+    },
+    "windowsAdapterManager": {
+      "passed": 22,
+      "failed": 0
+    },
+    "compiledWindowsRuntime": {
+      "passed": 2,
+      "failed": 0,
+      "modelTurns": [
+        1,
+        2
+      ]
+    },
+    "typecheck": "passed",
+    "isolatedBuild": "passed",
+    "runtimeManifestHashes": 8,
+    "diffWhitespace": "passed (cr-at-eol for existing Windows delivery files)"
+  },
+  "targetedTestsPassed": 58,
+  "broaderRegression": {
+    "candidateBeforeAdditionalCatchTest": {
+      "tests": 71,
+      "passed": 43,
+      "failed": 28
+    },
+    "unchangedBaseBridge": {
+      "tests": 37,
+      "passed": 9,
+      "failed": 28
+    },
+    "newFailedBridgeTests": [],
+    "baselineFailureCategories": [
+      "Windows Unix socket EACCES",
+      "Windows symlink EPERM"
+    ],
+    "otherConfirmedUnchangedBaseFailures": [
+      "Two Unix-socket protocol tests on Windows",
+      "One native continuation test with no verifier requests observed"
+    ]
+  },
+  "limitations": [
+    "Ambiguous transport failures still reserve an attempt; no blind refund or automatic replay",
+    "Persisted explicit one-attempt budgets are not changed automatically",
+    "This is submission-boundary replay, not another live solving batch",
+    "No production deployment or Git push performed"
+  ],
+  "deployment": {
+    "deployed": false,
+    "pushed": false,
+    "realModelCalls": 0,
+    "realSubmissions": 0,
+    "realEnvironments": 0
+  }
+}
